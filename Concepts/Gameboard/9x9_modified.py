@@ -1,5 +1,5 @@
-from tkinter import *
-from tkinter.ttk import *
+from tkinter import Tk
+from tkinter.ttk import Style, Button
 import random
 
 root = Tk()
@@ -18,9 +18,9 @@ rows = [[], [], [], [], [], [], [], [], []]
 for index in range(9):
     if index == 0:
         for number in first_row:
-            rows[index].append(Button(root, text=number, style="TButton"))  
+            rows[index].append(Button(root, text=number, style="TButton"))
     else:
-        for _ in range(9):      
+        for _ in range(9):
             rows[index].append(Button(root, text="-", style="TButton"))
 
 # Visualize all of them

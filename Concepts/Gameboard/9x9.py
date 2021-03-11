@@ -1,6 +1,5 @@
-from tkinter import *
-from tkinter.ttk import *
-import time
+from tkinter import Tk
+from tkinter.ttk import Style, Button
 
 root = Tk()
 root.title("9x9")
