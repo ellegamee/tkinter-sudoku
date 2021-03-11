@@ -3,5 +3,6 @@ data = {"Rows": {"r1": [], "r2": [], "r3": []},
         "Square": {"s1": [], "s2": [], "s3": []},
         "Entire": ["Entire but not really"]}
 
+# Easy way to point at a number
 print(data["Square"]["s1"])
 print(data["Entire"])
