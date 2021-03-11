@@ -1,0 +1,2 @@
+Use a text tkinter varible.
+If I do so I can link my database directly to each button.
