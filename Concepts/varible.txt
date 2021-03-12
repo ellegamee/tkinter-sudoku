@@ -1,2 +1,9 @@
 Use a text tkinter varible.
 If I do so I can link my database directly to each button.
+
+tkinter set/get function
+can get value and set a value
+
+refer back to tk_varible.py where there are
+snippets of code that will be inplemented into
+the gameboard conecpts
