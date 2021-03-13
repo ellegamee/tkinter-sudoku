@@ -1,0 +1,21 @@
+Do generate the game the first concept starts of by having a list of numbers from
+1 to 9 to make the first 9 numbers in the first row. After that there are two ways
+right now of doing it that sounds easy and simple.
+
+Version 1:
+Generate the first row by shuffle and loop index from temp list with my numbers and
+insert them on each button one by one. After the first row is done generate number by
+number one by one and check if that number works and then go to the next botton and
+do so until the gameboard is done.
+
+Version 2:
+Start the same way as version 1 in the beggning with the first row. After the first
+row is done you make generate the entire next row and check all the parameters if
+it's correct placement.
+
+If NOT then generate a new enitire row of numbers and try that again. This can go
+on forever but with computers by now beeing really powerful there should just be
+a short time for it to find a correct row.
+
+If YES then save each number onto the correct tkinter varible and save it into the
+data base correct. After that is done you can go on and try do generate the next row.
