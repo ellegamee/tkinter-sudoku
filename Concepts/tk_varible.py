@@ -25,3 +25,8 @@ root.setvar(name="string", value="Test...")
 print(strvar.get())
 strvar.set("test2")
 print(strvar.get())
+
+# TODO Good method on using the tkvarible on button
+bt1 = Button(root, textvariable="string2")
+bt1.pack()
+root.mainloop()
