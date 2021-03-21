@@ -10,3 +10,7 @@ the gameboard conecpts
 
 They will be saved in the data base like:
 StringVar(root, name="--undefined--")
+
+How to get valus from the data base!
+for i in gb["Rows"]["r1"]:
+    print(i.get())

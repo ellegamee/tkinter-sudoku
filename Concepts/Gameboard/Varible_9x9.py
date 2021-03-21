@@ -84,3 +84,7 @@ create_rcs()
 varible_row()
 varible_collumn()
 varible_square()
+
+# * How to get the values out
+for i in gb["Rows"]["r1"]:
+    print(i.get())

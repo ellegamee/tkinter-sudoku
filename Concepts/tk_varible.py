@@ -12,12 +12,22 @@ strvar = StringVar(root, name="string")
 boolvar = BooleanVar(root, True)
 doublevar = DoubleVar(root, 10.25)
 
+lst = []
+lst.append(StringVar(root, name="test", value="hi"))
+
+# Test to see if you can point at index in list
+print(lst)
+# * Really important
+print(lst[0].get())
+
+
 # * Really important!!!!!
 StringVar(root, name="string2")
 
 # * Really important!!!!
 root.setvar(name="string2", value="Test2...")
 print(root.getvar("string2"))
+
 
 # ! Not really best solution
 print()
