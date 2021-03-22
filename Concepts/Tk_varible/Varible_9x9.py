@@ -14,14 +14,12 @@ def create_rcs():
 
 def varible_row():
     row = 1
-    for count, i in enumerate(range(1, 82)):
-        if count % 9 == 0:
-            if count == 0:
-                continue
-            row += 1
-
+    for i in range(1, 82):
         gb["Rows"]["r{}".format(row)].append(
             StringVar(root, name="{}".format(i)))
+
+        if i % 9 == 0:
+            row += 1
 
 
 def varible_collumn():
@@ -37,6 +35,7 @@ def varible_collumn():
 
 
 def varible_square():
+    #! not working in square 3
     square = 1
     inside = 0
     endless = 1
@@ -84,7 +83,3 @@ create_rcs()
 varible_row()
 varible_collumn()
 varible_square()
-
-# * How to get the values out
-for i in gb["Rows"]["r1"]:
-    print(i.get())
