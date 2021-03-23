@@ -80,6 +80,7 @@ def gameboard():
             row += 1
 
 
+# Data base
 gb = {"start": [1, 2, 3, 4, 5, 6, 7, 8, 9],
       "row": {},
       "column": {},
@@ -106,10 +107,9 @@ varible_square()
 # stress test
 for i in range(1, 82):
     int_value = random.randint(1, 9)
-    root.setvar(name="{}".format(i), value="{}".format(i))
+    root.setvar(name="{}".format(i), value="{}".format(int_value))
 
 # Makes gameboard with varibels
 gameboard()
-
 
 root.mainloop()
