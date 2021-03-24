@@ -8,6 +8,26 @@ insert them on each button one by one. After the first row is done generate numb
 number one by one and check if that number works and then go to the next botton and
 do so until the gameboard is done.
 
+function ("gen")
+    Store three booleans (row, coll, sqr)
+    all of them as false.
+
+    for loop (82x)
+        while loop
+            randint 1,9
+
+            check if randint is not in ROW
+                store in boolean
+
+            check if randint is not in COLUMN
+                store in boolean
+
+            check if randint is not in SQUARE
+                store in boolean
+
+            if all boolean are true
+                store value in database
+
 Version 2:
 Start the same way as version 1 in the beggning with the first row. After the first
 row is done you make generate the entire next row and check all the parameters if
