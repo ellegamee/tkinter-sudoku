@@ -80,48 +80,46 @@ def gen():
 
         # TODO Improve here in the loop where everthing is the same
         # TODO Make a range 3 loop and just toggle between r,c,s
-        # Temp_r values
-        for i in range(1, 10):
-            for z in gb["row"]["r{}".format(i)]:
-                if str(name) == str(z):
-                    for x in range(0, 9):
+        for c in ["r", "c", "s"]:
+            if c == "r":
+                db = "row"
+            elif c == "c":
+                db = "column"
+            elif c == "s":
+                db = "square"
 
-                        if gb["row"]["r{}".format(i)][x].get() in ["1", "2", "3", "4", "5", "6", "7", "8", "9"]:
-                            temp_r.append(
-                                int(gb["row"]["r{}".format(i)][x].get()))
-                        else:
-                            temp_r.append(
-                                gb["row"]["r{}".format(i)][x].get())
+            for i in range(1, 10):
+                for z in gb["{}".format(db)]["{}{}".format(c, i)]:
+                    if str(name) == str(z):
+                        for x in range(0, 9):
 
-        # Temp_c values
-        for i in range(1, 10):
-            for z in gb["column"]["c{}".format(i)]:
-                if str(name) == str(z):
-                    for x in range(0, 9):
+                            if c == "r":
+                                if gb["row"]["r{}".format(i)][x].get() in ["1", "2", "3", "4", "5", "6", "7", "8", "9"]:
+                                    temp_r.append(
+                                        int(gb["row"]["r{}".format(i)][x].get()))
+                                else:
+                                    temp_r.append(
+                                        gb["row"]["r{}".format(i)][x].get())
 
-                        if gb["column"]["c{}".format(i)][x].get() in ["1", "2", "3", "4", "5", "6", "7", "8", "9"]:
-                            temp_c.append(
-                                int(gb["column"]["c{}".format(i)][x].get()))
-                        else:
-                            temp_c.append(
-                                gb["column"]["c{}".format(i)][x].get())
+                            elif c == "c":
+                                if gb["column"]["c{}".format(i)][x].get() in ["1", "2", "3", "4", "5", "6", "7", "8", "9"]:
+                                    temp_c.append(
+                                        int(gb["column"]["c{}".format(i)][x].get()))
+                                else:
+                                    temp_c.append(
+                                        gb["column"]["c{}".format(i)][x].get())
 
-        # Temp_s values
-        for i in range(1, 10):
-            for z in gb["square"]["s{}".format(i)]:
-                if str(name) == str(z):
-                    for x in range(0, 9):
+                            elif c == "s":
+                                if gb["square"]["s{}".format(i)][x].get() in ["1", "2", "3", "4", "5", "6", "7", "8", "9"]:
+                                    temp_s.append(
+                                        int(gb["square"]["s{}".format(i)][x].get()))
 
-                        if gb["square"]["s{}".format(i)][x].get() in ["1", "2", "3", "4", "5", "6", "7", "8", "9"]:
-                            temp_s.append(
-                                int(gb["square"]["s{}".format(i)][x].get()))
+                                else:
+                                    temp_s.append(
+                                        gb["square"]["s{}".format(i)][x].get())
 
-                        else:
-                            temp_s.append(
-                                gb["square"]["s{}".format(i)][x].get())
-
-        #! Not random, makes it not work
-        for i in range(1, 10):
+        random.shuffle(gb["start"])
+        for i in gb["start"]:
             num = i
             row = True
             coll = True
@@ -185,8 +183,25 @@ varible_square()
 
 
 # Generate the entire board
-gen()
+dawda = 0
+while True:
+    temp = []
+    gen()
+    for i in range(1, 82):
+        var = root.getvar(name="{}".format(i))
+        if var == "":
+            continue
 
+        else:
+            temp.append(var)
+
+    if len(temp) == 81:
+        break
+    temp = []
+
+    if dawda % 1000 == 0:
+        print(dawda)
+    dawda += 1
 
 # Makes gameboard with varibels
 gameboard()
