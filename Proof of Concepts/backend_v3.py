@@ -72,75 +72,74 @@ def gen():
     for i in range(0, 9):
         root.setvar(name="{}".format(i+1), value="{}".format(gb["start"][i]))
 
-    # Generates the rest
-    name = 10
-    lst = []
-    temp_r = []
-    temp_c = []
-    temp_s = []
-    for index in range(2, 10):
-        for i in range(3):
-            if i == 0:
-                key = "r"
+    for name in range(10, 82):
+        temp_r = []
+        temp_c = []
+        temp_s = []
+
+        # TODO Improve here in the loop where everthing is the same
+        # TODO Make a range 3 loop and just toggle between r,c,s
+        for c in ["r", "c", "s"]:
+            if c == "r":
                 db = "row"
-                temp_r = lst
-
-            if i == 1:
-                key = "c"
+            elif c == "c":
                 db = "column"
-                temp_c = lst
-
-            if i == 2:
-                key = "s"
+            elif c == "s":
                 db = "square"
-                temp_s = lst
 
-            #! Not working
-            #print("db", db)
-            #print("key", key)
-            for find in gb["{}".format(db)]["{}{}".format(key, index)]:
-                if str(name) == str(find):
-                    for x in range(0, 9):
-                        if gb["{}".format(db)]["{}{}".format(key, index)][x].get() in ["1", "2", "3", "4", "5", "6", "7", "8", "9"]:
-                            lst.append(
-                                int(gb["{}".format(db)]["{}{}".format(key, index)][x].get()))
+            for i in range(1, 10):
+                for z in gb["{}".format(db)]["{}{}".format(c, i)]:
+                    if str(name) == str(z):
+                        for x in range(0, 9):
 
-                        else:
-                            lst.append(gb["{}".format(db)]
-                                       ["{}{}".format(key, index)][x].get())
+                            if c == "r":
+                                if gb["row"]["r{}".format(i)][x].get() in ["1", "2", "3", "4", "5", "6", "7", "8", "9"]:
+                                    temp_r.append(
+                                        int(gb["row"]["r{}".format(i)][x].get()))
+                                else:
+                                    temp_r.append(
+                                        gb["row"]["r{}".format(i)][x].get())
 
-                    random.shuffle(gb["start"])
-                    for num in gb["start"]:
-                        row = True
-                        coll = True
-                        sqr = True
+                            elif c == "c":
+                                if gb["column"]["c{}".format(i)][x].get() in ["1", "2", "3", "4", "5", "6", "7", "8", "9"]:
+                                    temp_c.append(
+                                        int(gb["column"]["c{}".format(i)][x].get()))
+                                else:
+                                    temp_c.append(
+                                        gb["column"]["c{}".format(i)][x].get())
 
-                        print(num)
-                        print(temp_r)
-                        print(temp_c)
-                        print(temp_s)
-                        if num in temp_r:
-                            row = False
+                            elif c == "s":
+                                if gb["square"]["s{}".format(i)][x].get() in ["1", "2", "3", "4", "5", "6", "7", "8", "9"]:
+                                    temp_s.append(
+                                        int(gb["square"]["s{}".format(i)][x].get()))
 
-                        if num in temp_c:
-                            coll = False
+                                else:
+                                    temp_s.append(
+                                        gb["square"]["s{}".format(i)][x].get())
 
-                        if num in temp_s:
-                            sqr = False
+        random.shuffle(gb["start"])
+        for i in gb["start"]:
+            num = i
+            row = True
+            coll = True
+            sqr = True
 
-                        if row == True and coll == True and sqr == True:
-                            root.setvar(name="{}".format(name),
-                                        value="{}".format(num))
+            if num in temp_r:
+                row = False
 
-                            temp_r = []
-                            temp_c = []
-                            temp_s = []
-                            name += 1
+            if num in temp_c:
+                coll = False
 
-        # print(temp_r)
-        # print(temp_c)
-        # print(temp_s)
-        # input("")
+            if num in temp_s:
+                sqr = False
+
+            if row == True and coll == True and sqr == True:
+                root.setvar(name="{}".format(name), value="{}".format(num))
+
+                temp_r = []
+                temp_c = []
+                temp_s = []
+                break
 
 
 def gameboard():
