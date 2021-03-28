@@ -72,7 +72,10 @@ def gen():
     for i in range(0, 9):
         root.setvar(name="{}".format(i+1), value="{}".format(gb["start"][i]))
 
-    for name in range(10, 82):
+    name = 10
+    index = 0
+    loop = True
+    while loop:
         temp_r = []
         temp_c = []
         temp_s = []
@@ -118,8 +121,7 @@ def gen():
                                         gb["square"]["s{}".format(i)][x].get())
 
         random.shuffle(gb["start"])
-        for i in gb["start"]:
-            num = i
+        for count, num in enumerate(gb["start"]):
             row = True
             coll = True
             sqr = True
@@ -127,19 +129,35 @@ def gen():
             if num in temp_r:
                 row = False
 
-            if num in temp_c:
+            elif num in temp_c:
                 coll = False
 
-            if num in temp_s:
+            elif num in temp_s:
                 sqr = False
 
             if row == True and coll == True and sqr == True:
                 root.setvar(name="{}".format(name), value="{}".format(num))
 
-                temp_r = []
-                temp_c = []
-                temp_s = []
+                name += 1
+                index += 1
+                if index == 9:
+                    index = 0
                 break
+
+            if (count+1) == 9:
+                name = name - index
+                index = 0
+
+                for i in range(9):
+                    root.setvar(name="{}".format(name+i), value="")
+
+                # for i in range(9):
+                #    root.setvar(name="{}".format(name), value="")
+
+                break
+
+        if name == 82:
+            loop = False
 
 
 def gameboard():
@@ -180,29 +198,9 @@ varible_row()
 varible_column()
 varible_square()
 
-# Generate the entire board
-"""
-dawda = 0
-while True:
-    temp = []
-    gen()
-    for i in range(1, 82):
-        var = root.getvar(name="{}".format(i))
-        if var == "":
-            continue
-
-        else:
-            temp.append(var)
-
-    if len(temp) == 81:
-        break
-    temp = []
-
-    if dawda % 1000 == 0:
-        print(dawda)
-    dawda += 1
-"""
+# Generates board
 gen()
+print("done!")
 
 # Makes gameboard with varibels
 gameboard()
