@@ -85,35 +85,26 @@ def gen():
         for c in ["r", "c", "s"]:
             if c == "r":
                 db = "row"
+                lst = temp_r
+
             elif c == "c":
                 db = "column"
+                lst = temp_c
+
             elif c == "s":
                 db = "square"
+                lst = temp_s
 
             for i in range(1, 10):
                 for z in gb[f"{db}"][f"{c}{i}"]:
                     if str(name) == str(z):
                         for x in range(0, 9):
-
-                            # TODO make all of this into one
-                            if c == "r":
-                                if gb["row"][f"r{i}"][x].get() in compare:
-                                    temp_r.append(int(gb["row"][f"r{i}"][x].get()))
-                                else:
-                                    temp_r.append(gb["row"][f"r{i}"][x].get())
-
-                            elif c == "c":
-                                if gb["column"][f"c{i}"][x].get() in compare:
-                                    temp_c.append(int(gb["column"][f"c{i}"][x].get()))
-                                else:
-                                    temp_c.append(gb["column"][f"c{i}"][x].get())
-
-                            elif c == "s":
-                                if gb["square"][f"s{i}"][x].get() in compare:
-                                    temp_s.append(int(gb["square"][f"s{i}"][x].get()))
-
-                                else:
-                                    temp_s.append(gb["square"][f"s{i}"][x].get())
+                            # TODO Make it easier to read
+                            # ? Choose better varibales?
+                            if gb[f"{db}"][f"{c}{i}"][x].get() in compare:
+                                lst.append(int(gb[f"{db}"][f"{c}{i}"][x].get()))
+                            else:
+                                lst.append(gb[f"{db}"][f"{c}{i}"][x].get())
 
         random.shuffle(gb["start"])
         for count, num in enumerate(gb["start"]):
