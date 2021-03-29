@@ -9,8 +9,6 @@ def create_rcs():
     for i in range(1, 10):
         gb["row"][f"r{i}"] = []
         gb["column"][f"c{i}"] = []
-
-    for i in range(1, 10):
         gb["square"][f"s{i}"] = []
 
 
