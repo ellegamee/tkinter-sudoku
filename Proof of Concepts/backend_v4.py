@@ -10,15 +10,15 @@ def create_rcs():
     # Creates list where varibles will be stored
     # rcs stands for row, column, square
     for i in range(1, 10):
-        gb["row"][f"r{i}"] = []
-        gb["column"][f"c{i}"] = []
-        gb["square"][f"s{i}"] = []
+        data["row"][f"r{i}"] = []
+        data["column"][f"c{i}"] = []
+        data["square"][f"s{i}"] = []
 
 
 def varible_row():
     row = 1
     for i in range(1, 82):
-        gb["row"][f"r{row}"].append(StringVar(root, name=f"{i}"))
+        data["row"][f"r{row}"].append(StringVar(root, name=f"{i}"))
 
         if i % 9 == 0:
             row += 1
@@ -30,7 +30,7 @@ def varible_column():
         if column == 10:
             column = 1
 
-        gb["column"][f"c{column}"].append(StringVar(root, name=f"{i}"))
+        data["column"][f"c{column}"].append(StringVar(root, name=f"{i}"))
         column += 1
 
 
@@ -42,7 +42,7 @@ def varible_square():
     rerun = 0
 
     for i in range(1, 82):
-        gb["square"][f"s{square}"].append(StringVar(root, name=f"{i}"))
+        data["square"][f"s{square}"].append(StringVar(root, name=f"{i}"))
 
         if rerun == 2 and endless == 9:
             rerun = 0
@@ -66,13 +66,13 @@ def varible_square():
 
 def gen():
     # Generates first row
-    random.shuffle(gb["start"])
+    random.shuffle(data["start"])
     for i in range(0, 9):
-        var = gb["start"][i]
+        var = data["start"][i]
         root.setvar(name=f"{i+1}", value=f"{var}")
 
     compare = []
-    for item in gb["start"]:
+    for item in data["start"]:
         compare.append(str(item))
 
     name = 10
@@ -103,19 +103,19 @@ def gen():
             subsection = f"{c}{i}"
 
             for i in range(1, 10):
-                for z in gb[f"{section}"][f"{c}{i}"]:
+                for z in data[f"{section}"][f"{c}{i}"]:
                     if str(name) == str(z):
                         for x in range(0, 9):
 
                             # TODO Make it easier to read
                             # ? Choose better varibales?
-                            if gb[f"{section}"][f"{c}{i}"][x].get() in compare:
-                                lst.append(int(gb[f"{section}"][f"{c}{i}"][x].get()))
+                            if data[f"{section}"][f"{c}{i}"][x].get() in compare:
+                                lst.append(int(data[f"{section}"][f"{c}{i}"][x].get()))
                             else:
-                                lst.append(gb[f"{section}"][f"{c}{i}"][x].get())
+                                lst.append(data[f"{section}"][f"{c}{i}"][x].get())
 
-        random.shuffle(gb["start"])
-        for count, num in enumerate(gb["start"]):
+        random.shuffle(data["start"])
+        for count, num in enumerate(data["start"]):
             check = True
             if num in temp_r or num in temp_c or num in temp_s:
                 check = False
@@ -157,7 +157,7 @@ def gameboard():
 
 
 # Data base
-gb = {
+data = {
     "start": [1, 2, 3, 4, 5, 6, 7, 8, 9],
     "row": {},
     "column": {},
