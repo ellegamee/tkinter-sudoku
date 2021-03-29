@@ -77,6 +77,11 @@ def gen():
     name = 10
     index = 0
     loop = True
+
+    compare = []
+    for item in gb["start"]:
+        compare.append(str(item))
+
     while loop:
         temp_r = []
         temp_c = []
@@ -99,7 +104,7 @@ def gen():
 
                             if c == "r":
                                 # TODO Optimize the comparing list
-                                if gb["row"][f"r{i}"][x].get() in ["1", "2", "3", "4", "5", "6", "7", "8", "9"]:
+                                if gb["row"][f"r{i}"][x].get() in compare:
                                     temp_r.append(
                                         int(gb["row"][f"r{i}"][x].get()))
                                 else:
@@ -107,7 +112,7 @@ def gen():
                                         gb["row"][f"r{i}"][x].get())
 
                             elif c == "c":
-                                if gb["column"][f"c{i}"][x].get() in ["1", "2", "3", "4", "5", "6", "7", "8", "9"]:
+                                if gb["column"][f"c{i}"][x].get() in compare:
                                     temp_c.append(
                                         int(gb["column"][f"c{i}"][x].get()))
                                 else:
@@ -115,7 +120,7 @@ def gen():
                                         gb["column"][f"c{i}"][x].get())
 
                             elif c == "s":
-                                if gb["square"][f"s{i}"][x].get() in ["1", "2", "3", "4", "5", "6", "7", "8", "9"]:
+                                if gb["square"][f"s{i}"][x].get() in compare:
                                     temp_s.append(
                                         int(gb["square"][f"s{i}"][x].get()))
 
