@@ -65,7 +65,6 @@ def gen():
     # Generates first row
     random.shuffle(gb["start"])
     for i in range(0, 9):
-        # ? Cant make the last format into f"{}"
         var = gb["start"][i]
         root.setvar(name=f"{i+1}", value=f"{var}")
 
@@ -118,22 +117,11 @@ def gen():
 
         random.shuffle(gb["start"])
         for count, num in enumerate(gb["start"]):
-            row = True
-            coll = True
-            sqr = True
+            check = True
+            if num in temp_r or num in temp_c or num in temp_s:
+                check = False
 
-            # ? Better with just on if (num in temp_r or num in...)
-            # * Removes all but one boolean
-            if num in temp_r:
-                row = False
-
-            elif num in temp_c:
-                coll = False
-
-            elif num in temp_s:
-                sqr = False
-
-            if row == True and coll == True and sqr == True:
+            if check == True:
                 root.setvar(name=f"{name}", value=f"{num}")
 
                 # ? Replace index var...?
