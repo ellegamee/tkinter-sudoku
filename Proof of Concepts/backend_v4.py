@@ -76,7 +76,6 @@ def gen():
         compare.append(str(item))
 
     name = 10
-    index = 0
     loop = True
     while loop:
         temp_r = []
@@ -108,11 +107,13 @@ def gen():
                         for x in range(0, 9):
 
                             # TODO Make it easier to read
-                            # ? Choose better varibales?
+                            # ? Choose better varibale names?
                             if data[f"{section}"][f"{c}{i}"][x].get() in compare:
-                                lst.append(int(data[f"{section}"][f"{c}{i}"][x].get()))
+                                lst.append(
+                                    int(data[f"{section}"][f"{c}{i}"][x].get()))
                             else:
-                                lst.append(data[f"{section}"][f"{c}{i}"][x].get())
+                                lst.append(data[f"{section}"]
+                                           [f"{c}{i}"][x].get())
 
         random.shuffle(data["start"])
         for count, num in enumerate(data["start"]):
@@ -122,21 +123,14 @@ def gen():
 
             if check == True:
                 root.setvar(name=f"{name}", value=f"{num}")
-
-                # ? Replace index var...?
                 name += 1
-                index += 1
-                if index == 9:
-                    index = 0
                 break
 
             if (count + 1) == 9:
-                name = name - index
-                index = 0
+                name = name - (count-1)
 
                 for i in range(9):
                     root.setvar(name=f"{name+i}", value="")
-
                 break
 
         if name == 82:
