@@ -15,10 +15,10 @@ Database:
 All data is stored in a special way. There is one big dictionary with four section. There are three main section (row, column and square).
 Those three have nine subsections, first letter from their section and then the a number pointing at wich subsection.
 
-  Data =
-    "row"
-        "r1"
-        "r2"
-        "etc..."
-    "column"
-    "square"
+  *Data =
+    *"row"
+        *"r1"
+        *"r2"
+        *"etc..."
+    *"column"
+    *"square"
