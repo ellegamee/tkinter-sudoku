@@ -2,6 +2,9 @@ from tkinter import *
 from tkinter.ttk import Style, Button
 import random
 
+# TODO make import better, with out using star
+# * Imports to many functions that are not needed
+
 
 def create_rcs():
     # Creates list where varibles will be stored
