@@ -11,7 +11,7 @@ can experiment and see the latest development.
 
 ***
 
-Database:
+## __Database:__
 All data is stored in a special way. There is one big dictionary with four section. There are three main section (row, column and square).
 Those three have nine subsections, first letter from their section and then the a number pointing at wich subsection.
 
