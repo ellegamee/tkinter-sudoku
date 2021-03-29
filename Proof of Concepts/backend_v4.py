@@ -58,7 +58,6 @@ def varible_square():
             endless = 0
             rerun += 1
 
-        # * Works
         elif inside == 3:
             square += 1
             inside = 0
@@ -74,14 +73,13 @@ def gen():
         # ? Cant make the last format into f"{}"
         root.setvar(name=f"{i+1}", value="{}".format(gb["start"][i]))
 
-    name = 10
-    index = 0
-    loop = True
-
     compare = []
     for item in gb["start"]:
         compare.append(str(item))
 
+    name = 10
+    index = 0
+    loop = True
     while loop:
         temp_r = []
         temp_c = []
@@ -102,8 +100,8 @@ def gen():
                     if str(name) == str(z):
                         for x in range(0, 9):
 
+                            # TODO make all of this into one
                             if c == "r":
-                                # TODO Optimize the comparing list
                                 if gb["row"][f"r{i}"][x].get() in compare:
                                     temp_r.append(
                                         int(gb["row"][f"r{i}"][x].get()))
@@ -134,6 +132,8 @@ def gen():
             coll = True
             sqr = True
 
+            # ? Better with just on if (num in temp_r or num in...)
+            # * Removes all but one boolean
             if num in temp_r:
                 row = False
 
@@ -146,6 +146,7 @@ def gen():
             if row == True and coll == True and sqr == True:
                 root.setvar(name=f"{name}", value=f"{num}")
 
+                # ? Replace index var...?
                 name += 1
                 index += 1
                 if index == 9:
