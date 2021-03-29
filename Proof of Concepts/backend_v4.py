@@ -84,27 +84,32 @@ def gen():
         # TODO Make a range 3 loop and just toggle between r,c,s
         for c in ["r", "c", "s"]:
             if c == "r":
-                db = "row"
+                section = "row"
                 lst = temp_r
 
             elif c == "c":
-                db = "column"
+                section = "column"
                 lst = temp_c
 
             elif c == "s":
-                db = "square"
+                section = "square"
                 lst = temp_s
 
+            # ! Does not work to replace f"{c}{i}" to subsection
+            # TODO Find solution
+            subsection = f"{c}{i}"
+
             for i in range(1, 10):
-                for z in gb[f"{db}"][f"{c}{i}"]:
+                for z in gb[f"{section}"][f"{c}{i}"]:
                     if str(name) == str(z):
                         for x in range(0, 9):
+
                             # TODO Make it easier to read
                             # ? Choose better varibales?
-                            if gb[f"{db}"][f"{c}{i}"][x].get() in compare:
-                                lst.append(int(gb[f"{db}"][f"{c}{i}"][x].get()))
+                            if gb[f"{section}"][f"{c}{i}"][x].get() in compare:
+                                lst.append(int(gb[f"{section}"][f"{c}{i}"][x].get()))
                             else:
-                                lst.append(gb[f"{db}"][f"{c}{i}"][x].get())
+                                lst.append(gb[f"{section}"][f"{c}{i}"][x].get())
 
         random.shuffle(gb["start"])
         for count, num in enumerate(gb["start"]):
