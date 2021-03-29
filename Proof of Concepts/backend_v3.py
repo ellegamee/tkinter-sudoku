@@ -151,9 +151,6 @@ def gen():
                 for i in range(9):
                     root.setvar(name="{}".format(name+i), value="")
 
-                # for i in range(9):
-                #    root.setvar(name="{}".format(name), value="")
-
                 break
 
         if name == 82:

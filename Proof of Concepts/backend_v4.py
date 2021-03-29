@@ -36,6 +36,7 @@ def varible_column():
 
 
 def varible_square():
+    # TODO analyze for future improvement
     square = 1
     inside = 1
     endless = 1
@@ -97,7 +98,8 @@ def gen():
                         for x in range(0, 9):
 
                             if c == "r":
-                                if gb["row"][f"r{i}"][x].get() in gb["start"]:
+                                # TODO Optimize the comparing list
+                                if gb["row"][f"r{i}"][x].get() in ["1", "2", "3", "4", "5", "6", "7", "8", "9"]:
                                     temp_r.append(
                                         int(gb["row"][f"r{i}"][x].get()))
                                 else:
@@ -105,7 +107,7 @@ def gen():
                                         gb["row"][f"r{i}"][x].get())
 
                             elif c == "c":
-                                if gb["column"][f"c{i}"][x].get() in gb["start"]:
+                                if gb["column"][f"c{i}"][x].get() in ["1", "2", "3", "4", "5", "6", "7", "8", "9"]:
                                     temp_c.append(
                                         int(gb["column"][f"c{i}"][x].get()))
                                 else:
@@ -113,7 +115,7 @@ def gen():
                                         gb["column"][f"c{i}"][x].get())
 
                             elif c == "s":
-                                if gb["square"][f"s{i}"][x].get() in gb["start"]:
+                                if gb["square"][f"s{i}"][x].get() in ["1", "2", "3", "4", "5", "6", "7", "8", "9"]:
                                     temp_s.append(
                                         int(gb["square"][f"s{i}"][x].get()))
 
