@@ -15,8 +15,7 @@ def create_rcs():
 def varible_row():
     row = 1
     for i in range(1, 82):
-        gb["row"][f"r{row}"].append(
-            StringVar(root, name=f"{i}"))
+        gb["row"][f"r{row}"].append(StringVar(root, name=f"{i}"))
 
         if i % 9 == 0:
             row += 1
@@ -28,8 +27,7 @@ def varible_column():
         if column == 10:
             column = 1
 
-        gb["column"][f"c{column}"].append(
-            StringVar(root, name=f"{i}"))
+        gb["column"][f"c{column}"].append(StringVar(root, name=f"{i}"))
         column += 1
 
 
@@ -41,8 +39,7 @@ def varible_square():
     rerun = 0
 
     for i in range(1, 82):
-        gb["square"][f"s{square}"].append(
-            StringVar(root, name=f"{i}"))
+        gb["square"][f"s{square}"].append(StringVar(root, name=f"{i}"))
 
         if rerun == 2 and endless == 9:
             rerun = 0
@@ -69,7 +66,8 @@ def gen():
     random.shuffle(gb["start"])
     for i in range(0, 9):
         # ? Cant make the last format into f"{}"
-        root.setvar(name=f"{i+1}", value="{}".format(gb["start"][i]))
+        var = gb["start"][i]
+        root.setvar(name=f"{i+1}", value=f"{var}")
 
     compare = []
     for item in gb["start"]:
@@ -101,28 +99,22 @@ def gen():
                             # TODO make all of this into one
                             if c == "r":
                                 if gb["row"][f"r{i}"][x].get() in compare:
-                                    temp_r.append(
-                                        int(gb["row"][f"r{i}"][x].get()))
+                                    temp_r.append(int(gb["row"][f"r{i}"][x].get()))
                                 else:
-                                    temp_r.append(
-                                        gb["row"][f"r{i}"][x].get())
+                                    temp_r.append(gb["row"][f"r{i}"][x].get())
 
                             elif c == "c":
                                 if gb["column"][f"c{i}"][x].get() in compare:
-                                    temp_c.append(
-                                        int(gb["column"][f"c{i}"][x].get()))
+                                    temp_c.append(int(gb["column"][f"c{i}"][x].get()))
                                 else:
-                                    temp_c.append(
-                                        gb["column"][f"c{i}"][x].get())
+                                    temp_c.append(gb["column"][f"c{i}"][x].get())
 
                             elif c == "s":
                                 if gb["square"][f"s{i}"][x].get() in compare:
-                                    temp_s.append(
-                                        int(gb["square"][f"s{i}"][x].get()))
+                                    temp_s.append(int(gb["square"][f"s{i}"][x].get()))
 
                                 else:
-                                    temp_s.append(
-                                        gb["square"][f"s{i}"][x].get())
+                                    temp_s.append(gb["square"][f"s{i}"][x].get())
 
         random.shuffle(gb["start"])
         for count, num in enumerate(gb["start"]):
@@ -151,7 +143,7 @@ def gen():
                     index = 0
                 break
 
-            if (count+1) == 9:
+            if (count + 1) == 9:
                 name = name - index
                 index = 0
 
@@ -168,8 +160,7 @@ def gameboard():
     row = 0
     column = 0
     for i in range(1, 82):
-        button = Button(root, text=root.getvar(
-            f"{i}"), style="TButton")
+        button = Button(root, text=root.getvar(f"{i}"), style="TButton")
         button.grid(row=row, column=column)
 
         column += 1
@@ -179,11 +170,13 @@ def gameboard():
 
 
 # Data base
-gb = {"start": [1, 2, 3, 4, 5, 6, 7, 8, 9],
-      "row": {},
-      "column": {},
-      "square": {},
-      "entire": ["--Undefined--"]}
+gb = {
+    "start": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    "row": {},
+    "column": {},
+    "square": {},
+    "entire": ["--Undefined--"],
+}
 
 # Make tkinter
 root = Tk()
