@@ -158,11 +158,11 @@ def gameboard():
 
 # Data base
 data = {
-    "start": [1, 2, 3, 4, 5, 6, 7, 8, 9],
     "row": {},
     "column": {},
     "square": {},
     "entire": ["--Undefined--"],
+    "start": [1, 2, 3, 4, 5, 6, 7, 8, 9],
 }
 
 # Make tkinter
