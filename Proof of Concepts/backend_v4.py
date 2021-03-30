@@ -38,22 +38,19 @@ def varible_square():
     # TODO analyze for future improvement
     square = 1
     inside = 1
-    endless = 1
     rerun = 0
 
-    for i in range(1, 82):
-        data["square"][f"s{square}"].append(StringVar(root, name=f"{i}"))
+    for name in range(1, 82):
+        data["square"][f"s{square}"].append(StringVar(root, name=f"{name}"))
 
-        if rerun == 2 and endless == 9:
+        if rerun == 2 and name % 9 == 0:
             rerun = 0
             inside = 0
-            endless = 0
             square += 1
 
-        elif endless == 9:
+        elif name % 9 == 0:
             square -= 2
             inside = 0
-            endless = 0
             rerun += 1
 
         elif inside == 3:
@@ -61,7 +58,6 @@ def varible_square():
             inside = 0
 
         inside += 1
-        endless += 1
 
 
 def gen():
@@ -99,21 +95,20 @@ def gen():
 
             # ! Does not work to replace f"{c}{i}" to subsection
             # TODO Find solution
-            subsection = f"{c}{i}"
+            subsection = c + str(i)
+            # print(subsection)
 
             for i in range(1, 10):
-                for z in data[f"{section}"][f"{c}{i}"]:
+                for z in data[f"{section}"][f"{c + str(i)}"]:
                     if str(name) == str(z):
                         for x in range(0, 9):
 
                             # TODO Make it easier to read
                             # ? Choose better varibale names?
                             if data[f"{section}"][f"{c}{i}"][x].get() in compare:
-                                lst.append(
-                                    int(data[f"{section}"][f"{c}{i}"][x].get()))
+                                lst.append(int(data[f"{section}"][f"{c}{i}"][x].get()))
                             else:
-                                lst.append(data[f"{section}"]
-                                           [f"{c}{i}"][x].get())
+                                lst.append(data[f"{section}"][f"{c}{i}"][x].get())
 
         random.shuffle(data["start"])
         for count, num in enumerate(data["start"]):
@@ -127,7 +122,7 @@ def gen():
                 break
 
             if (count + 1) == 9:
-                name = name - (count-1)
+                name = name - (count - 1)
 
                 for i in range(9):
                     root.setvar(name=f"{name+i}", value="")
