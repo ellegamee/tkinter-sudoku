@@ -8,7 +8,6 @@ import random
 
 def create_database():
     # Creates list where varibles will be stored
-    # rcs stands for row, column, square
     for i in range(1, 10):
         data["row"][f"r{i}"] = []
         data["column"][f"c{i}"] = []
