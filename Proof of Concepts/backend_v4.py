@@ -6,7 +6,7 @@ import random
 # * Imports to many functions that are not needed
 
 
-def create_rcs():
+def create_database():
     # Creates list where varibles will be stored
     # rcs stands for row, column, square
     for i in range(1, 10):
@@ -14,50 +14,33 @@ def create_rcs():
         data["column"][f"c{i}"] = []
         data["square"][f"s{i}"] = []
 
-
-def varible_row():
+    # TODO take a look for further optimization
     row = 1
-    for i in range(1, 82):
-        data["row"][f"r{row}"].append(StringVar(root, name=f"{i}"))
-
-        if i % 9 == 0:
-            row += 1
-
-
-def varible_column():
     column = 1
-    for i in range(1, 82):
-        if column == 10:
-            column = 1
-
-        data["column"][f"c{column}"].append(StringVar(root, name=f"{i}"))
-        column += 1
-
-
-def varible_square():
-    # TODO analyze for future improvement
     square = 1
-    inside = 1
-    rerun = 0
 
     for name in range(1, 82):
+
+        data["row"][f"r{row}"].append(StringVar(root, name=f"{name}"))
+        data["column"][f"c{column}"].append(StringVar(root, name=f"{name}"))
         data["square"][f"s{square}"].append(StringVar(root, name=f"{name}"))
 
-        if rerun == 2 and name % 9 == 0:
-            rerun = 0
-            inside = 0
+        if name % 9 == 0:
+            row += 1
+            column = 0
+            square = 1
+
+            if row > 3 and not row > 6:
+                square += 3
+
+            if row > 6 and not row > 9:
+                square += 6
+
+        # *Square ticks up  here:
+        if column == 3 or column == 6:
             square += 1
 
-        elif name % 9 == 0:
-            square -= 2
-            inside = 0
-            rerun += 1
-
-        elif inside == 3:
-            square += 1
-            inside = 0
-
-        inside += 1
+        column += 1
 
 
 def gen():
@@ -163,13 +146,8 @@ root.geometry("450x350")
 style = Style()
 style.configure("TButton", font=("calibri", 15, "bold"), height=10, width=3)
 
-# Create data base function
-create_rcs()
-
-# Create varibles function
-varible_row()
-varible_column()
-varible_square()
+# Create data base
+create_database()
 
 # Generates board
 gen()
