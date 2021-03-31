@@ -142,7 +142,7 @@ style.configure("TButton", font=("calibri", 15, "bold"), height=10, width=3)
 create_database()
 
 # Generates board
-seed = input("Input a seed: ")
+# seed = input("Input a seed: ")
 number_generator(seed)
 print("done!")
 
