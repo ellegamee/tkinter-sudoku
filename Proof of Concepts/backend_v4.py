@@ -8,20 +8,17 @@ import random
 
 def create_database():
     # Creates list where varibles will be stored
-    # rcs stands for row, column, square
     for index in range(1, 10):
         data["row"][f"r{index}"] = []
         data["column"][f"c{index}"] = []
         data["square"][f"s{index}"] = []
 
-    # TODO take a look for further optimization
     # * Creatas all numbers
     row = 1
     column = 1
     square = 1
 
     for name in range(1, 82):
-
         data["row"][f"r{row}"].append(StringVar(root, name=f"{name}"))
         data["column"][f"c{column}"].append(StringVar(root, name=f"{name}"))
         data["square"][f"s{square}"].append(StringVar(root, name=f"{name}"))
@@ -43,7 +40,7 @@ def create_database():
         column += 1
 
 
-def gen():
+def number_generator():
     # Generates first row
     random.shuffle(data["start"])
     for i in range(0, 9):
@@ -146,7 +143,7 @@ style.configure("TButton", font=("calibri", 15, "bold"), height=10, width=3)
 create_database()
 
 # Generates board
-gen()
+number_generator()
 print("done!")
 
 # Makes gameboard with varibels
