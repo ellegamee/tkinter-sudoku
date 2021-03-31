@@ -38,7 +38,7 @@ def create_database():
         column += 1
 
 
-def number_generator(seed):
+def number_generator():
     # Generates first row
 
     # random.Random(seed).shuffle(data["start"])
@@ -143,7 +143,7 @@ create_database()
 
 # Generates board
 # seed = input("Input a seed: ")
-number_generator(seed)
+number_generator()
 print("done!")
 
 # Makes gameboard with varibels
