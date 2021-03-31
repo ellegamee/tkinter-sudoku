@@ -103,7 +103,7 @@ def number_generator():
         if name == 82:
             loop = False
 
-    # * Makes copy of the correct ones
+    # * Makes copy of entire grid
     for obj in range(1, 82):
         data["entire"].append(root.getvar(f"{obj}"))
 
