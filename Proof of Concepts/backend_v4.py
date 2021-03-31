@@ -41,8 +41,8 @@ def create_database():
 def number_generator(seed):
     # Generates first row
 
-    random.Random(seed).shuffle(data["start"])
-    # random.shuffle(data["start"])
+    # random.Random(seed).shuffle(data["start"])
+    random.shuffle(data["start"])
     for i in range(0, 9):
         var = data["start"][i]
         root.setvar(name=f"{i+1}", value=f"{var}")
@@ -78,7 +78,8 @@ def number_generator(seed):
                             else:
                                 lst.append(data[sector][subsector][obj].get())
 
-        random.Random(seed).shuffle(data["start"])
+        # random.Random(seed).shuffle(data["start"])
+        random.shuffle(data["start"])
         for count, num in enumerate(data["start"]):
 
             # TODO Remove this and make it work with the next if inside
