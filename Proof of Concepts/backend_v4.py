@@ -9,12 +9,13 @@ import random
 def create_database():
     # Creates list where varibles will be stored
     # rcs stands for row, column, square
-    for i in range(1, 10):
-        data["row"][f"r{i}"] = []
-        data["column"][f"c{i}"] = []
-        data["square"][f"s{i}"] = []
+    for index in range(1, 10):
+        data["row"][f"r{index}"] = []
+        data["column"][f"c{index}"] = []
+        data["square"][f"s{index}"] = []
 
     # TODO take a look for further optimization
+    # * Creatas all numbers
     row = 1
     column = 1
     square = 1
@@ -36,7 +37,6 @@ def create_database():
             if row > 6 and not row > 9:
                 square += 6
 
-        # *Square ticks up  here:
         if column == 3 or column == 6:
             square += 1
 
@@ -61,37 +61,29 @@ def gen():
         temp_c = []
         temp_s = []
 
-        # TODO Improve here in the loop where everthing is the same
-        # TODO Make a range 3 loop and just toggle between r,c,s
-        for c in ["r", "c", "s"]:
-            if c == "r":
-                section = "row"
-                lst = temp_r
-
-            elif c == "c":
-                section = "column"
-                lst = temp_c
-
-            elif c == "s":
-                section = "square"
-                lst = temp_s
-
-            # ! Does not work to replace f"{c}{i}" to subsection
-            # TODO Find solution
-            subsection = c + str(i)
-            # print(subsection)
+        # TODO Fix better names for list's
+        lst_sector = ["row", "column", "square"]
+        lst_lst = [temp_r, temp_c, temp_s]
+        lst_c = ["r", "c", "s"]
+        for sector, lst, c in zip(lst_sector, lst_lst, lst_c):
 
             for i in range(1, 10):
-                for z in data[f"{section}"][f"{c + str(i)}"]:
-                    if str(name) == str(z):
-                        for x in range(0, 9):
+                subsector = f"{c}{i}"
 
-                            # TODO Make it easier to read
-                            # ? Choose better varibale names?
-                            if data[f"{section}"][f"{c}{i}"][x].get() in compare:
-                                lst.append(int(data[f"{section}"][f"{c}{i}"][x].get()))
+                for z in data[f"{sector}"][f"{subsector}"]:
+                    if str(name) == str(z):
+                        for obj in range(0, 9):
+
+                            if data[f"{sector}"][f"{subsector}"][obj].get() in compare:
+
+                                # ! This formating is odd
+                                # ? Worth fixing?
+                                lst.append(
+                                    int(data[f"{sector}"][f"{subsector}"][obj].get())
+                                )
+
                             else:
-                                lst.append(data[f"{section}"][f"{c}{i}"][x].get())
+                                lst.append(data[f"{sector}"][f"{subsector}"][obj].get())
 
         random.shuffle(data["start"])
         for count, num in enumerate(data["start"]):
@@ -114,6 +106,10 @@ def gen():
         if name == 82:
             loop = False
 
+    # * Makes copy of the correct ones
+    for obj in range(1, 82):
+        data["entire"].append(root.getvar(f"{obj}"))
+
 
 def gameboard():
     row = 0
@@ -133,7 +129,7 @@ data = {
     "row": {},
     "column": {},
     "square": {},
-    "entire": ["--Undefined--"],
+    "entire": [],
     "start": [1, 2, 3, 4, 5, 6, 7, 8, 9],
 }
 
