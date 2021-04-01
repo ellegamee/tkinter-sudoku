@@ -108,17 +108,32 @@ def number_generator():
         data["entire"].append(root.getvar(f"{obj}"))
 
 
+def change_num():
+    print("sort of works")
+
+
 def gameboard():
+    # TODO Put list in database
+    # ? Is it needed
+    buttons = []
+
     row = 0
     column = 0
     for i in range(81):
-        button = Button(root, text=root.getvar(f"{i}"), style="TButton")
-        button.grid(row=row, column=column)
+        buttons.append(Button(root, text="", style="TButton", command=change_num))
+        buttons[i].grid(row=row, column=column)
 
         column += 1
         if (i + 1) % 9 == 0:
             column = 0
             row += 1
+
+    # * Visual beutie
+    # ? Can i make these two for into one
+    for i in range(81):
+        buttons[i]["text"] = root.getvar(f"{i}")
+        root.update()
+        root.after(20)
 
 
 # Data base
