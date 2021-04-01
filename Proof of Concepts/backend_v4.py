@@ -13,11 +13,9 @@ def create_database():
         data["column"][f"c{index}"] = []
         data["square"][f"s{index}"] = []
 
-    # * Creatas all numbers
     row = 1
     column = 1
     square = 1
-
     for name in range(1, 82):
         data["row"][f"r{row}"].append(StringVar(root, name=f"{name}"))
         data["column"][f"c{column}"].append(StringVar(root, name=f"{name}"))
@@ -42,6 +40,8 @@ def create_database():
 
 def number_generator():
     # Generates first row
+
+    # random.Random(seed).shuffle(data["start"])
     random.shuffle(data["start"])
     for i in range(0, 9):
         var = data["start"][i]
@@ -64,26 +64,25 @@ def number_generator():
         lst_c = ["r", "c", "s"]
         for sector, lst, c in zip(lst_sector, lst_lst, lst_c):
 
-            for i in range(1, 10):
-                subsector = f"{c}{i}"
+            for i in range(9):
+                subsector = c + str(i + 1)
 
-                for z in data[f"{sector}"][f"{subsector}"]:
+                for z in data[sector][subsector]:
+                    # TODO Take a look at that
                     if str(name) == str(z):
-                        for obj in range(0, 9):
+                        for obj in range(9):
 
-                            if data[f"{sector}"][f"{subsector}"][obj].get() in compare:
-
-                                # ! This formating is odd
-                                # ? Worth fixing?
-                                lst.append(
-                                    int(data[f"{sector}"][f"{subsector}"][obj].get())
-                                )
+                            if data[sector][subsector][obj].get() in compare:
+                                lst.append(int(data[sector][subsector][obj].get()))
 
                             else:
-                                lst.append(data[f"{sector}"][f"{subsector}"][obj].get())
+                                lst.append(data[sector][subsector][obj].get())
 
+        # random.Random(seed).shuffle(data["start"])
         random.shuffle(data["start"])
         for count, num in enumerate(data["start"]):
+
+            # TODO Remove this and make it work with the next if inside
             check = True
             if num in temp_r or num in temp_c or num in temp_s:
                 check = False
@@ -143,6 +142,7 @@ style.configure("TButton", font=("calibri", 15, "bold"), height=10, width=3)
 create_database()
 
 # Generates board
+# seed = input("Input a seed: ")
 number_generator()
 print("done!")
 
