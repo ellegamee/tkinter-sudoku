@@ -13,7 +13,7 @@ def create_database():
         data["column"][f"c{index}"] = []
         data["square"][f"s{index}"] = []
 
-    # * Creatas all numbers
+    # * Creatas all names
     row = 0
     column = 0
     square = 0
@@ -113,15 +113,15 @@ def change_num():
 
 
 def gameboard():
-    # TODO Put list in database
-    # ? Is it needed
-    buttons = []
-
     row = 0
     column = 0
     for i in range(81):
-        buttons.append(Button(root, text="", style="TButton", command=change_num))
-        buttons[i].grid(row=row, column=column)
+        transfer = f"b{i}"
+
+        data["button"].append(
+            Button(root, name=f"b{i}", text="", style="TButton", command=change_num)
+        )
+        data["button"][i].grid(row=row, column=column)
 
         column += 1
         if (i + 1) % 9 == 0:
@@ -131,7 +131,7 @@ def gameboard():
     # * Visual beutie
     # ? Can i make these two for into one
     for i in range(81):
-        buttons[i]["text"] = root.getvar(f"{i}")
+        data["button"][i]["text"] = root.getvar(f"{i}")
         root.update()
         root.after(20)
 
@@ -142,6 +142,7 @@ data = {
     "column": {},
     "square": {},
     "entire": [],
+    "button": [],
     "start": [1, 2, 3, 4, 5, 6, 7, 8, 9],
 }
 
