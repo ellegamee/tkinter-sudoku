@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter.ttk import Style, Button
+from functools import partial
 import random
 
 # TODO make import better, with out using star
@@ -108,18 +109,23 @@ def number_generator():
         data["entire"].append(root.getvar(f"{obj}"))
 
 
-def change_num():
-    print("sort of works")
+def change_num(name):
+    data["button"][name]["text"] = input("Inside: ")
+    root.setvar(name=f"{name}", value="C")
 
 
 def gameboard():
     row = 0
     column = 0
     for i in range(81):
-        transfer = f"b{i}"
 
         data["button"].append(
-            Button(root, name=f"b{i}", text="", style="TButton", command=change_num)
+            Button(
+                root,
+                name=f"b{i}",
+                style="TButton",
+                command=partial(change_num, i),
+            )
         )
         data["button"][i].grid(row=row, column=column)
 
