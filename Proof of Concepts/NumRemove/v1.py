@@ -110,6 +110,37 @@ def number_generator():
         data["entire"].append(root.getvar(f"{obj}"))
 
 
+def remove_num():
+
+    zero = False
+    removed = 0
+    while removed <= (81 - 34):
+        index = random.randrange(81)
+        # print(index)
+
+        # * Check if button is empty
+        if root.getvar(f"{index}") == "":
+            continue
+
+        temp = []
+        for i in range(81):
+            temp.append(root.getvar(f"{i}"))
+        temp = "".join(temp)
+
+        if temp.count(root.getvar(f"{index}")) == 0 and zero == False:
+            root.setvar(f"{index}", value="")
+
+            zero = True
+            removed += 1
+            continue
+
+        if temp.count(root.getvar(f"{index}")) > 0:
+            root.setvar(f"{index}", value="")
+
+            removed += 1
+            continue
+
+
 def change_num(name):
     Button(name=f"{name}")
     root.update()
