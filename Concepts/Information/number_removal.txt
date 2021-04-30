@@ -1,7 +1,12 @@
 -random how many numbers per row to remove
-    -loop database for how many more numbers can be removed of that specifik
     -loop random index wich number to remove, loop check database again
+    -loop database for how many more numbers can be removed of that number
 
 rule:
 -atleast 1 of each 
 -but one number can be zero of
+
+===============
+
+-random for index on whole board
+    -check if you can remove number
