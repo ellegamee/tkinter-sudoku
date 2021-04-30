@@ -1,10 +1,11 @@
 from tkinter import *
+import tkinter
 from tkinter.ttk import Style, Button
 from functools import partial
 import random
 
 # TODO make import better, with out using star
-# * Imports to many functions that are not needed
+# * Wildcard problem
 
 
 def create_database():
@@ -110,6 +111,10 @@ def number_generator():
 
 
 def change_num(name):
+    #! relief config dont work
+    Button(name=f"{name}").config(relief=FLAT)
+    root.update()
+
     data["button"][name]["text"] = input("Inside: ")
     root.setvar(name=f"{name}", value="C")
 
