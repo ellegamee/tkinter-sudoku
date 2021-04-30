@@ -1,3 +1,7 @@
 -random how many numbers per row to remove
     -loop database for how many more numbers can be removed of that specifik
     -loop random index wich number to remove, loop check database again
+
+rule:
+-atleast 1 of each 
+-but one number can be zero of
