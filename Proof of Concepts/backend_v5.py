@@ -111,8 +111,7 @@ def number_generator():
 
 
 def change_num(name):
-    #! relief config dont work
-    Button(name=f"{name}").config(relief=FLAT)
+    Button(name=f"{name}")
     root.update()
 
     data["button"][name]["text"] = input("Inside: ")
