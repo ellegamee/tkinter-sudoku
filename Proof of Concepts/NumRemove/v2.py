@@ -1,7 +1,7 @@
 from tkinter import *
-import tkinter
 from tkinter.ttk import Style, Button
 from functools import partial
+from PIL import Image, ImageDraw, ImageFont, ImageTk
 import random
 
 # TODO make import better, with out using star
@@ -40,6 +40,17 @@ def create_database():
             square += 1
 
         column += 1
+
+
+def image_generator(num):
+    # TODO Update varible names
+    img = Image.new("RGB", (33, 33))
+    d = ImageDraw.Draw(img)
+    font = ImageFont.truetype("calibri.ttf", 30)
+    d.text((9, 3), num, fill=(255, 255, 255), font=font)
+
+    button_img = ImageTk.PhotoImage(img)
+    return button_img
 
 
 def number_generator():
