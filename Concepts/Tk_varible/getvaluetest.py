@@ -41,29 +41,7 @@ def getSquareFor(index):
             end += 18
 
     # * Gets wich square
-    if column // 3 == 0:
-        if row // 3 == 0:
-            return lst[0]
-        if row // 3 == 1:
-            return lst[3]
-        if row // 3 == 2:
-            return lst[6]
-
-    if column // 3 == 1:
-        if row // 3 == 0:
-            return lst[1]
-        if row // 3 == 1:
-            return lst[4]
-        if row // 3 == 2:
-            return lst[7]
-
-    if column // 3 == 2:
-        if row // 3 == 0:
-            return lst[2]
-        if row // 3 == 1:
-            return lst[5]
-        if row // 3 == 2:
-            return lst[8]
+    return lst[((column // 3) + (row // 3 * 3))]
 
 
-print(getSquareFor(9))
+print(getSquareFor(80))
