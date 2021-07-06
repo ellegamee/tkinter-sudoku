@@ -115,11 +115,6 @@ root.title("Soduko Game")
 root.geometry("450x350")
 
 game = Game(root)
-"""
-for i in game.data.data:
-    print(i.get())
-"""
-
 print(game.data.boardAnswer)
 
 root.mainloop()
