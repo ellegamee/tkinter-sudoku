@@ -44,16 +44,18 @@ def create_database():
 
 def number_generator():
     # Generates first row
+    """
     random.shuffle(data["start"])
     for i in range(9):
         var = data["start"][i]
         root.setvar(name=f"{i}", value=f"{var}")
+    """
 
     compare = []
     for item in data["start"]:
         compare.append(str(item))
 
-    name = 9
+    name = 0
     loop = True
     while loop:
         temp_r = []
@@ -78,11 +80,17 @@ def number_generator():
                                 # ! This formating is odd
                                 # ? Worth fixing?
                                 lst.append(
-                                    int(data[f"{sector}"][f"{subsector}"][obj].get())
+                                    int(data[f"{sector}"]
+                                        [f"{subsector}"][obj].get())
                                 )
 
                             else:
-                                lst.append(data[f"{sector}"][f"{subsector}"][obj].get())
+                                lst.append(data[f"{sector}"]
+                                           [f"{subsector}"][obj].get())
+
+        print(temp_c)
+        print(temp_r)
+        print(temp_s)
 
         random.shuffle(data["start"])
         for count, num in enumerate(data["start"]):
