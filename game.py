@@ -122,6 +122,7 @@ class DataBase:
 
 class GameBoard:
     def __init__(self, root):
+        #! Will not be used
         canvas = Canvas(root, bg="#FFFFFF", height=1920, width=1080)
         canvas.pack()
 
@@ -138,7 +139,6 @@ class Game:
     def generateGameBoard(self):
         for index in range(81):
             # Button information
-            # ? Make button something else
             self.data.button.append(
                 Button(root, name=str(index), style="TButton")
             )
