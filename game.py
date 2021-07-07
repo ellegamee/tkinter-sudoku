@@ -91,7 +91,7 @@ class DataBase:
         start = 0
         end = 18
 
-        # * Makes all lists
+        # Makes all lists
         for listKey in range(9):
 
             # Subsquare index, counts:
@@ -120,23 +120,12 @@ class DataBase:
             return lst[((column // 3) + (row // 3 * 3))]
 
 
-class GameBoard:
-    def __init__(self, root):
-        #! Will not be used
-        canvas = Canvas(root, bg="#FFFFFF", height=1920, width=1080)
-        canvas.pack()
+class RenderBoard:
+    def __init__(self, root, data):
+        self.data = data
+        self.renderNumbers(root)
 
-        canvas.create_line(0, 100, 100, 100, fill="#000000")
-        root.update()
-
-
-class Game:
-    def __init__(self, root):
-        self.data = DataBase(root)
-        #self.board = GameBoard(root)
-        self.generateGameBoard()
-
-    def generateGameBoard(self):
+    def renderNumbers(self, root):
         for index in range(81):
             # Button information
             self.data.button.append(
@@ -152,6 +141,15 @@ class Game:
             self.data.button[index]["text"] = root.getvar(str(index))
             root.update()
             root.after(20)
+
+    def renderGrid(self):
+        pass
+
+
+class Game:
+    def __init__(self, root):
+        self.data = DataBase(root)
+        self.board = RenderBoard(root, self.data)
 
 
 # Game window properties
