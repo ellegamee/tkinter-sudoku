@@ -148,9 +148,8 @@ class Game:
             column = index % 9 * 9
             self.data.button[index].grid(row=row, column=column)
 
-        # Transition animation when loading
-        for i in range(81):
-            self.data.button[i]["text"] = root.getvar(f"{i}")
+            # Animation numbers
+            self.data.button[index]["text"] = root.getvar(str(index))
             root.update()
             root.after(20)
 
