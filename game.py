@@ -125,11 +125,9 @@ class Game:
         self.generateGameBoard()
 
     def generateGameBoard(self):
-
         for index in range(81):
-            row = index // 9 * 9
-            column = index % 9 * 9
-
+            # Button information
+            # ? Make button something else
             self.data.button.append(
                 Button(
                     root,
@@ -137,10 +135,13 @@ class Game:
                     style="TButton",
                 )
             )
+
+            # Row and column to put button
+            row = index // 9 * 9
+            column = index % 9 * 9
             self.data.button[index].grid(row=row, column=column)
 
-        # * Visual beutie
-        # ? Can i make these two for into one
+        # Transition animation when loading
         for i in range(81):
             self.data.button[i]["text"] = root.getvar(f"{i}")
             root.update()
