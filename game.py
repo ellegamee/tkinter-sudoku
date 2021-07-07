@@ -1,4 +1,5 @@
-from tkinter import Tk, IntVar
+from tkinter import Tk, IntVar, Canvas
+from tkinter.constants import Y
 from tkinter.ttk import Button, Style
 import random
 
@@ -119,9 +120,19 @@ class DataBase:
             return lst[((column // 3) + (row // 3 * 3))]
 
 
+class GameBoard:
+    def __init__(self, root):
+        canvas = Canvas(root, bg="#FFFFFF", height=1920, width=1080)
+        canvas.pack()
+
+        canvas.create_line(0, 100, 100, 100, fill="#000000")
+        root.update()
+
+
 class Game:
     def __init__(self, root):
         self.data = DataBase(root)
+        #self.board = GameBoard(root)
         self.generateGameBoard()
 
     def generateGameBoard(self):
@@ -129,11 +140,7 @@ class Game:
             # Button information
             # ? Make button something else
             self.data.button.append(
-                Button(
-                    root,
-                    name=f"b{index}",
-                    style="TButton",
-                )
+                Button(root, name=str(index), style="TButton")
             )
 
             # Row and column to put button
@@ -154,9 +161,8 @@ style = Style()
 root.title("Soduko Game")
 root.geometry("450x350")
 
-style.configure("TButton", font=("calibri", 15, "bold"), height=10, width=3)
+style.configure("TButton", font=("calibri", 15, "bold"),
+                height=10, width=3, relief="flat")
 
 game = Game(root)
-print(game.data.boardAnswer)
-
 root.mainloop()
