@@ -125,9 +125,10 @@ class Game:
         self.generateGameBoard()
 
     def generateGameBoard(self):
-        row = 0
-        column = 0
+
         for index in range(81):
+            row = index // 9 * 9
+            column = index % 9 * 9
 
             self.data.button.append(
                 Button(
@@ -137,11 +138,6 @@ class Game:
                 )
             )
             self.data.button[index].grid(row=row, column=column)
-
-            column += 1
-            if (index + 1) % 9 == 0:
-                column = 0
-                row += 1
 
         # * Visual beutie
         # ? Can i make these two for into one
