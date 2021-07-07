@@ -1,4 +1,5 @@
 from tkinter import Tk, IntVar
+from tkinter.ttk import Button, Style
 import random
 
 
@@ -121,12 +122,42 @@ class DataBase:
 class Game:
     def __init__(self, root):
         self.data = DataBase(root)
+        self.generateGameBoard()
+
+    def generateGameBoard(self):
+        row = 0
+        column = 0
+        for index in range(81):
+
+            self.data.button.append(
+                Button(
+                    root,
+                    name=f"b{index}",
+                    style="TButton",
+                )
+            )
+            self.data.button[index].grid(row=row, column=column)
+
+            column += 1
+            if (index + 1) % 9 == 0:
+                column = 0
+                row += 1
+
+        # * Visual beutie
+        # ? Can i make these two for into one
+        for i in range(81):
+            self.data.button[i]["text"] = root.getvar(f"{i}")
+            root.update()
+            root.after(20)
 
 
 # Game window properties
 root = Tk()
+style = Style()
 root.title("Soduko Game")
 root.geometry("450x350")
+
+style.configure("TButton", font=("calibri", 15, "bold"), height=10, width=3)
 
 game = Game(root)
 print(game.data.boardAnswer)
