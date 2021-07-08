@@ -1,4 +1,4 @@
-from tkinter import Tk, IntVar, Canvas, TOP
+from tkinter import Tk, IntVar, Canvas, BOTH, YES
 from tkinter.ttk import Button, Style
 import random
 
@@ -24,11 +24,16 @@ class DataBase:
             # Pinch of randomness
             # Todo make generating with a seed
             random.shuffle(self.validNumbers)
+
+            tempRow = self.getRowFor(index, True)
+            tempColumn = self.getColumnFor(index, True)
+            tempSquare = self.getSquareFor(index, True)
+
             for count, num in enumerate(self.validNumbers):
 
                 check = True
                 # Is it valid to place number or not
-                if num in self.getRowFor(index, True) or num in self.getColumnFor(index, True) or num in self.getSquareFor(index, True):
+                if num in tempRow or num in tempColumn or num in tempSquare:
                     check = False
 
                 # If okay to set value
@@ -40,15 +45,19 @@ class DataBase:
 
                 # If row on gameboard fails to generate
                 if (count + 1) == 9:
+                    """
                     # Backs index back to start of row
                     index = self.getRowFor(index, False)[0]
+                    """
 
                     # Clears all values on row
-                    for tempIndex in self.getRowFor(index, False):
+                    for tempIndex in range(81):
                         root.setvar(name=str(tempIndex), value=0)
 
+                    index = 0
                     break
 
+            # print(index)
             if index == 81:
                 loop = False
 
@@ -122,12 +131,27 @@ class DataBase:
 class RenderBoard:
     def __init__(self, root, data):
         self.data = data
-        self.renderNumbers(root)
+        self.root = root
 
-        while True:
-            self.renderGrid(root)
+        self.background = Canvas(
+            root, bg="white", height=root.winfo_height(), width=root.winfo_width())
 
-    def renderNumbers(self, root):
+        self.grid = Canvas(self.background, bg="blue", width=(
+            root.winfo_height()-40), height=(root.winfo_height()-40))
+
+        self.background.bind("<Configure>", self.on_resize)
+        self.background.pack(fill=BOTH, expand=YES)
+        self.grid.place(x=20, y=20)
+        root.update()
+
+    def on_resize(self, event):
+        width = min(event.width, event.height) - 40
+        height = min(event.width, event.height) - 40
+
+        self.grid.config(width=width, height=height)
+        root.update()
+
+    def renderNumbers(self, root, renderInstant):
         for index in range(81):
             # Button information
             self.data.button.append(
@@ -135,19 +159,16 @@ class RenderBoard:
             )
 
             # Where to put button
-            self.data.button[index].place(x=20, y=20)
+            self.data.button[index].place(x=(1+(index*30)), y=20)
 
             # Animation numbers
             self.data.button[index]["text"] = root.getvar(str(index))
+            if renderInstant == False:
+                root.update()
+                root.after(20)
+
+        if renderInstant == True:
             root.update()
-            root.after(20)
-
-    def renderGrid(self, root):
-        grid = Canvas(root, bg="blue", width=root.winfo_width(),
-                      height=root.winfo_height())
-
-        grid.place(x=-1, y=-1)
-        root.update()
 
 
 class Game:
@@ -165,5 +186,6 @@ root.geometry("450x350")
 style.configure("TButton", font=("calibri", 15, "bold"),
                 height=10, width=3, relief="flat")
 
+print("loading....")
 game = Game(root)
 root.mainloop()

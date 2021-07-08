@@ -88,10 +88,6 @@ def number_generator():
                                 lst.append(data[f"{sector}"]
                                            [f"{subsector}"][obj].get())
 
-        print(temp_c)
-        print(temp_r)
-        print(temp_s)
-
         random.shuffle(data["start"])
         for count, num in enumerate(data["start"]):
             check = True
