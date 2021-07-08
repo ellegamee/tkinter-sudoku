@@ -1,5 +1,4 @@
-from tkinter import Tk, IntVar, Canvas
-from tkinter.constants import Y
+from tkinter import Tk, IntVar, Canvas, TOP
 from tkinter.ttk import Button, Style
 import random
 
@@ -125,6 +124,9 @@ class RenderBoard:
         self.data = data
         self.renderNumbers(root)
 
+        while True:
+            self.renderGrid(root)
+
     def renderNumbers(self, root):
         for index in range(81):
             # Button information
@@ -132,18 +134,20 @@ class RenderBoard:
                 Button(root, name=str(index), style="TButton")
             )
 
-            # Row and column to put button
-            row = index // 9 * 9
-            column = index % 9 * 9
-            self.data.button[index].grid(row=row, column=column)
+            # Where to put button
+            self.data.button[index].place(x=20, y=20)
 
             # Animation numbers
             self.data.button[index]["text"] = root.getvar(str(index))
             root.update()
             root.after(20)
 
-    def renderGrid(self):
-        pass
+    def renderGrid(self, root):
+        grid = Canvas(root, bg="blue", width=root.winfo_width(),
+                      height=root.winfo_height())
+
+        grid.place(x=-1, y=-1)
+        root.update()
 
 
 class Game:
