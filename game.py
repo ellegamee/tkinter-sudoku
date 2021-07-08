@@ -1,4 +1,5 @@
 from tkinter import Tk, IntVar, Canvas, BOTH, YES
+from tkinter.constants import ANCHOR
 from tkinter.ttk import Button, Style
 import random
 
@@ -130,15 +131,24 @@ class DataBase:
 
 class RenderBoard:
     def __init__(self, root, data):
+        # Vars
         self.data = data
         self.root = root
 
+        # Canvas
         self.background = Canvas(
-            root, bg="white", height=root.winfo_height(), width=root.winfo_width())
+            root, bg="gray", height=root.winfo_height(), width=root.winfo_width())
 
-        self.grid = Canvas(self.background, bg="blue", width=(
+        self.grid = Canvas(self.background, bg="white", width=(
             root.winfo_height()-40), height=(root.winfo_height()-40))
 
+        # Lines
+        self.line1 = self.grid.create_line(100, 0, 100, 300, width=2)
+        self.line2 = self.grid.create_line(0, 100, 300, 100, width=2)
+        self.line3 = self.grid.create_line(200, 0, 200, 300, width=2)
+        self.line4 = self.grid.create_line(0, 200, 300, 200, width=2)
+
+        # Update and print
         self.background.bind("<Configure>", self.on_resize)
         self.background.pack(fill=BOTH, expand=YES)
         self.grid.place(x=20, y=20)
@@ -148,7 +158,14 @@ class RenderBoard:
         width = min(event.width, event.height) - 40
         height = min(event.width, event.height) - 40
 
+        # Canvas
         self.grid.config(width=width, height=height)
+
+        # Lines
+        self.grid.coords(self.line1, (width/3), 0, (width/3), width)
+        self.grid.coords(self.line3, (width/1.5), 0, (width/1.5), width)
+        self.grid.coords(self.line2, 0, (width/3), width, (width/3))
+        self.grid.coords(self.line4, 0, (width/1.5), width, (width/1.5))
         root.update()
 
     def renderNumbers(self, root, renderInstant):
@@ -181,7 +198,7 @@ class Game:
 root = Tk()
 style = Style()
 root.title("Soduko Game")
-root.geometry("450x350")
+root.geometry("490x340")
 
 style.configure("TButton", font=("calibri", 15, "bold"),
                 height=10, width=3, relief="flat")
