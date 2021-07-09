@@ -8,6 +8,7 @@ class DataBase:
     def __init__(self, root):
         self.validNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
         self.boardAnswer = []
+        self.buttonFrame = []
         self.button = []
         self.data = []
 
@@ -144,18 +145,18 @@ class RenderBoard:
             root.winfo_height()-40), height=(root.winfo_height()-40))
 
         # Lines
-        self.renderThinLines(root)
+        self.renderThinLines()
         for index in range(3, len(self.lines), 3):
             # Make thick lines
             self.grid.itemconfig(self.lines[index], width=2)
 
         # Update and print
-        self.background.bind("<Configure>", self.on_resize)
+        self.background.bind("<Configure>", self.onResize)
         self.background.pack(fill=BOTH, expand=YES)
         self.grid.place(x=20, y=20)
         root.update()
 
-    def on_resize(self, event):
+    def onResize(self, event):
         width = min(event.width, event.height) - 40
         height = min(event.width, event.height) - 40
 
@@ -163,16 +164,17 @@ class RenderBoard:
         self.grid.config(width=width, height=height)
 
         # Lines
+        # ? Shorten the cordinates
         for index in range(18):
             # Horizontal lines
             if index <= 8:
-                self.grid.coords(self.lines[index],
-                                 0, (height*(self.scale*index)), width, (height*(self.scale*index)))
+                self.grid.coords(
+                    self.lines[index], 0, (height*(self.scale*index)), width, (height*(self.scale*index)))
 
             # Vertical line
             else:
-                self.grid.coords(self.lines[index],
-                                 (width*(self.scale*(index-9))), 0,  (width*(self.scale*(index-9))), height)
+                self.grid.coords(
+                    self.lines[index], (width*(self.scale*(index-9))), 0,  (width*(self.scale*(index-9))), height)
 
     def renderNumbers(self, root, renderInstant):
         for index in range(81):
@@ -193,7 +195,7 @@ class RenderBoard:
         if renderInstant == True:
             root.update()
 
-    def renderThinLines(self, root):
+    def renderThinLines(self):
         self.lines = []
         for loop in range(18):
             if loop <= 8:
