@@ -1,5 +1,4 @@
 from tkinter import Tk, IntVar, Canvas, BOTH, YES
-from tkinter.constants import ANCHOR
 from tkinter.ttk import Button, Style
 import random
 
@@ -145,23 +144,23 @@ class RenderBoard:
             root.winfo_height()-40), height=(root.winfo_height()-40))
 
         # Lines
-        self.renderThinLines()
+        self.renderLines()
         for index in range(3, len(self.lines), 3):
             # Make thick lines
-            self.grid.itemconfig(self.lines[index], width=2)
+            self.grid.itemconfig(self.lines[index], width=3)
 
         # Update and print
         self.background.bind("<Configure>", self.onResize)
         self.background.pack(fill=BOTH, expand=YES)
         self.grid.place(x=20, y=20)
+        self.renderNumbers(root, True)
         root.update()
 
     def onResize(self, event):
-        width = min(event.width, event.height) - 40
-        height = min(event.width, event.height) - 40
+        minSize = min(event.width, event.height) - 40
 
         # Canvas
-        self.grid.config(width=width, height=height)
+        self.grid.config(width=minSize, height=minSize)
 
         # Lines
         # ? Shorten the cordinates
@@ -169,43 +168,61 @@ class RenderBoard:
             # Horizontal lines
             if index <= 8:
                 self.grid.coords(
-                    self.lines[index], 0, (height*(self.scale*index)), width, (height*(self.scale*index)))
+                    self.lines[index], 0, (minSize*(self.scale*index)), minSize, (minSize*(self.scale*index)))
 
             # Vertical line
             else:
                 self.grid.coords(
-                    self.lines[index], (width*(self.scale*(index-9))), 0,  (width*(self.scale*(index-9))), height)
+                    self.lines[index], (minSize*(self.scale*(index-9))), 0,  (minSize*(self.scale*(index-9))), minSize)
 
     def renderNumbers(self, root, renderInstant):
+        yCord = 2
+        xCord = 2
+        count = 0
+
         for index in range(81):
             # Button information
             self.data.button.append(
-                Button(root, name=str(index), style="TButton")
+                Button(self.grid, name=str(index), style="TButton")
             )
 
-            # Where to put button
-            self.data.button[index].place(x=(1+(index*30)), y=20)
+            # Frame Cordinates
+            if index % 9 == 0 and index != 0:
+                yCord += 45
+                count = 0
 
-            # Animation numbers
+            self.data.button[index].place(
+                x=xCord+(count*45), y=yCord, width=41, height=41)
+
+            """
+            self.data.buttonFrame[index].place(
+                x=((xCord*42)+(xCord*42)), y=yCord)
+            xCord += 1
+            """
+
+            # Animate numbers
             self.data.button[index]["text"] = root.getvar(str(index))
+
             if renderInstant == False:
                 root.update()
                 root.after(20)
 
-        if renderInstant == True:
-            root.update()
+            if renderInstant == True:
+                root.update()
 
-    def renderThinLines(self):
+            count += 1
+
+    def renderLines(self):
         self.lines = []
         for loop in range(18):
-            if loop <= 8:
+            if loop <= 30:
                 # Horizontal lines
                 self.lines.append(self.grid.create_line(
-                    0, (35*loop), 315, (35*loop), width=1))
+                    0, (41*loop), 396, (41*loop), width=1))
             else:
                 # Vertical lines
                 self.lines.append(self.grid.create_line(
-                    (35*(loop-9)), 0, (35*(loop-9)), 315, width=1))
+                    (41*(loop-9)), 0, (41*(loop-9)), 396, width=1))
 
 
 class Game:
@@ -218,10 +235,11 @@ class Game:
 root = Tk()
 style = Style()
 root.title("Soduko Game")
-root.geometry("517x355")
+root.geometry("608x446")
+root.aspect()
 
-style.configure("TButton", font=("calibri", 15, "bold"),
-                height=10, width=3, relief="flat")
+style.configure("TButton", font=("consolas", 18, "bold"),
+                relief="flat", padx=0, pady=0, bg="black")
 
 print("loading....")
 game = Game(root)
