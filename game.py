@@ -134,6 +134,7 @@ class RenderBoard:
         # Vars
         self.data = data
         self.root = root
+        self.scale = 100/9-11
 
         # Canvas
         self.background = Canvas(
@@ -143,10 +144,10 @@ class RenderBoard:
             root.winfo_height()-40), height=(root.winfo_height()-40))
 
         # Lines
-        self.line1 = self.grid.create_line(100, 0, 100, 300, width=2)
-        self.line2 = self.grid.create_line(0, 100, 300, 100, width=2)
-        self.line3 = self.grid.create_line(200, 0, 200, 300, width=2)
-        self.line4 = self.grid.create_line(0, 200, 300, 200, width=2)
+        self.renderThinLines(root)
+        for index in range(3, len(self.lines), 3):
+            # Make thick lines
+            self.grid.itemconfig(self.lines[index], width=2)
 
         # Update and print
         self.background.bind("<Configure>", self.on_resize)
@@ -162,11 +163,16 @@ class RenderBoard:
         self.grid.config(width=width, height=height)
 
         # Lines
-        self.grid.coords(self.line1, (width/3), 0, (width/3), width)
-        self.grid.coords(self.line3, (width/1.5), 0, (width/1.5), width)
-        self.grid.coords(self.line2, 0, (width/3), width, (width/3))
-        self.grid.coords(self.line4, 0, (width/1.5), width, (width/1.5))
-        root.update()
+        for index in range(18):
+            # Horizontal lines
+            if index <= 8:
+                self.grid.coords(self.lines[index],
+                                 0, (height*(self.scale*index)), width, (height*(self.scale*index)))
+
+            # Vertical line
+            else:
+                self.grid.coords(self.lines[index],
+                                 (width*(self.scale*(index-9))), 0,  (width*(self.scale*(index-9))), height)
 
     def renderNumbers(self, root, renderInstant):
         for index in range(81):
@@ -187,6 +193,18 @@ class RenderBoard:
         if renderInstant == True:
             root.update()
 
+    def renderThinLines(self, root):
+        self.lines = []
+        for loop in range(18):
+            if loop <= 8:
+                # Horizontal lines
+                self.lines.append(self.grid.create_line(
+                    0, (35*loop), 315, (35*loop), width=1))
+            else:
+                # Vertical lines
+                self.lines.append(self.grid.create_line(
+                    (35*(loop-9)), 0, (35*(loop-9)), 315, width=1))
+
 
 class Game:
     def __init__(self, root):
@@ -198,7 +216,7 @@ class Game:
 root = Tk()
 style = Style()
 root.title("Soduko Game")
-root.geometry("490x340")
+root.geometry("517x355")
 
 style.configure("TButton", font=("calibri", 15, "bold"),
                 height=10, width=3, relief="flat")
