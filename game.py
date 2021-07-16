@@ -7,7 +7,6 @@ class DataBase:
     def __init__(self, root):
         self.validNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
         self.boardAnswer = []
-        self.buttonFrame = []
         self.button = []
         self.data = []
 
@@ -147,7 +146,7 @@ class RenderBoard:
         self.renderLines()
         for index in range(3, len(self.lines), 3):
             # Make thick lines
-            self.grid.itemconfig(self.lines[index], width=3)
+            self.grid.itemconfig(self.lines[index], width=2)
 
         # Update and print
         self.background.bind("<Configure>", self.onResize)
@@ -175,9 +174,24 @@ class RenderBoard:
                 self.grid.coords(
                     self.lines[index], (minSize*(self.scale*(index-9))), 0,  (minSize*(self.scale*(index-9))), minSize)
 
+        #! Not working
+        # Buttons
+        size = (minSize/9) - 3
+        yCord = 2
+        count = 0
+
+        for index in range(81):
+            if index % 9 == 0 and index != 0:
+                yCord += minSize/9
+                count = 0
+
+            self.data.button[index].place(
+                x=2+(count*(minSize/9)), y=yCord, width=size, height=size)
+
+            count += 1
+
     def renderNumbers(self, root, renderInstant):
         yCord = 2
-        xCord = 2
         count = 0
 
         for index in range(81):
@@ -192,13 +206,7 @@ class RenderBoard:
                 count = 0
 
             self.data.button[index].place(
-                x=xCord+(count*45), y=yCord, width=41, height=41)
-
-            """
-            self.data.buttonFrame[index].place(
-                x=((xCord*42)+(xCord*42)), y=yCord)
-            xCord += 1
-            """
+                x=2+(count*45), y=yCord, width=42, height=42)
 
             # Animate numbers
             self.data.button[index]["text"] = root.getvar(str(index))
@@ -207,10 +215,10 @@ class RenderBoard:
                 root.update()
                 root.after(20)
 
-            if renderInstant == True:
-                root.update()
-
             count += 1
+
+        if renderInstant == True:
+            root.update()
 
     def renderLines(self):
         self.lines = []
@@ -239,7 +247,7 @@ root.geometry("608x446")
 root.aspect()
 
 style.configure("TButton", font=("consolas", 18, "bold"),
-                relief="flat", padx=0, pady=0, bg="black")
+                relief="flat")
 
 print("loading....")
 game = Game(root)
