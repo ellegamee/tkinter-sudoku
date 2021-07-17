@@ -1,5 +1,4 @@
-from tkinter import Tk, IntVar, Canvas, BOTH, YES
-from tkinter.ttk import Button, Style
+from tkinter import Tk, IntVar, Canvas, BOTH, YES, Button
 import random
 
 
@@ -197,7 +196,8 @@ class RenderBoard:
         for index in range(81):
             # Button information
             self.data.button.append(
-                Button(self.grid, name=str(index), style="TButton")
+                Button(self.grid, name=str(index), font=(
+                    "consolas", 18, "bold"), relief="flat")
             )
 
             # Frame Cordinates
@@ -241,13 +241,12 @@ class Game:
 
 # Game window properties
 root = Tk()
-style = Style()
+#style = Style()
 root.title("Soduko Game")
 root.geometry("608x446")
 root.aspect()
 
-style.configure("TButton", font=("consolas", 18, "bold"),
-                relief="flat")
+#style.configure("TButton", font=("consolas", 18, "bold"),relief="flat")
 
 print("loading....")
 game = Game(root)
