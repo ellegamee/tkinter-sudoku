@@ -1,4 +1,4 @@
-from tkinter import Tk, IntVar, Canvas, BOTH, YES, Button
+from tkinter import Tk, IntVar, Canvas, BOTH, YES, Button, font
 import random
 
 
@@ -173,7 +173,6 @@ class RenderBoard:
                 self.grid.coords(
                     self.lines[index], (minSize*(self.scale*(index-9))), 0,  (minSize*(self.scale*(index-9))), minSize)
 
-        #! Not working
         # Buttons
         size = (minSize/9) - 3
         yCord = 2
@@ -186,6 +185,9 @@ class RenderBoard:
 
             self.data.button[index].place(
                 x=2+(count*(minSize/9)), y=yCord, width=size, height=size)
+
+            self.data.button[index].configure(
+                font=("consolas", int(minSize/9*0.4), "bold"))
 
             count += 1
 
