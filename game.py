@@ -234,14 +234,9 @@ class RenderBoard:
     def renderLines(self):
         self.lines = []
         for loop in range(18):
-            if loop <= 30:
-                # Horizontal lines
-                self.lines.append(self.grid.create_line(
-                    0, (41*loop), 396, (41*loop), width=1))
-            else:
-                # Vertical lines
-                self.lines.append(self.grid.create_line(
-                    (41*(loop-9)), 0, (41*(loop-9)), 396, width=1))
+            # Horizontal lines
+            self.lines.append(self.grid.create_line(
+                0, (41*loop), 396, (41*loop), width=1))
 
 
 class Game:
