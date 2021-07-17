@@ -13,15 +13,18 @@ class DataBase:
         for index in range(81):
             self.data.append(IntVar(root, name=str(index)))
 
+        # Start generating
         self.numberGenerator()
 
     def numberGenerator(self):
+
         loop = True
         index = 0
         while loop:
 
             # Pinch of randomness
             # Todo make generating with a seed
+            # Todo make generating with traceback method
             random.shuffle(self.validNumbers)
 
             tempRow = self.getRowFor(index, True)
@@ -49,14 +52,13 @@ class DataBase:
                     index = self.getRowFor(index, False)[0]
                     """
 
-                    # Clears all values on row
+                    # Clears all values on board
                     for tempIndex in range(81):
                         root.setvar(name=str(tempIndex), value=0)
 
                     index = 0
                     break
 
-            # print(index)
             if index == 81:
                 loop = False
 
@@ -147,10 +149,12 @@ class RenderBoard:
             # Make thick lines
             self.grid.itemconfig(self.lines[index], width=2)
 
-        # Update and print
+        # Update and render
         self.background.bind("<Configure>", self.onResize)
         self.background.pack(fill=BOTH, expand=YES)
         self.grid.place(x=20, y=20)
+
+        # If true, numbers will render instant
         self.renderNumbers(root, True)
         root.update()
 
@@ -178,14 +182,17 @@ class RenderBoard:
         yCord = 2
         count = 0
 
+        # ? Shorten the for loop
         for index in range(81):
             if index % 9 == 0 and index != 0:
                 yCord += minSize/9
                 count = 0
 
+            # Update button place
             self.data.button[index].place(
                 x=2+(count*(minSize/9)), y=yCord, width=size, height=size)
 
+            # Update number font/size
             self.data.button[index].configure(
                 font=("consolas", int(minSize/9*0.4), "bold"))
 
@@ -197,9 +204,10 @@ class RenderBoard:
 
         for index in range(81):
             # Button information
+            # Todo remove small grey outline around buttons
             self.data.button.append(
                 Button(self.grid, name=str(index), font=(
-                    "consolas", 18, "bold"), relief="flat")
+                    "consolas", 18, "bold"), relief="flat", bg="white")
             )
 
             # Frame Cordinates
@@ -219,6 +227,7 @@ class RenderBoard:
 
             count += 1
 
+        # Instant render
         if renderInstant == True:
             root.update()
 
@@ -243,12 +252,8 @@ class Game:
 
 # Game window properties
 root = Tk()
-#style = Style()
 root.title("Soduko Game")
 root.geometry("608x446")
-root.aspect()
-
-#style.configure("TButton", font=("consolas", 18, "bold"),relief="flat")
 
 print("loading....")
 game = Game(root)
