@@ -6,8 +6,8 @@ class DataBase:
     def __init__(self, root):
         self.validNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
         self.boardAnswer = []
-        self.lines = []
         self.button = []
+        self.lines = []
         self.data = []
 
         # Generating empty varibles
@@ -205,10 +205,9 @@ class RenderBoard:
 
         for index in range(81):
             # Button information
-            # Todo remove small grey outline around buttons
             self.data.button.append(
                 Button(self.grid, name=str(index), font=(
-                    "consolas", 18, "bold"), relief="flat", bg="white")
+                    "consolas", 18, "bold"), relief="flat", bg="white", bd=0)
             )
 
             # Frame Cordinates
