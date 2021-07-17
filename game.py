@@ -1,4 +1,4 @@
-from tkinter import Tk, IntVar, Canvas, BOTH, YES, Button, font
+from tkinter import Tk, IntVar, Canvas, BOTH, YES, Button
 import random
 
 
