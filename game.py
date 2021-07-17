@@ -48,10 +48,6 @@ class DataBase:
 
                 # If row on gameboard fails to generate
                 if (count + 1) == 9:
-                    """
-                    # Backs index back to start of row
-                    index = self.getRowFor(index, False)[0]
-                    """
 
                     # Clears all values on board
                     for tempIndex in range(81):
