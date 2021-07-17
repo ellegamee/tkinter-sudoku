@@ -6,6 +6,7 @@ class DataBase:
     def __init__(self, root):
         self.validNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
         self.boardAnswer = []
+        self.lines = []
         self.button = []
         self.data = []
 
@@ -145,9 +146,9 @@ class RenderBoard:
 
         # Lines
         self.renderLines()
-        for index in range(3, len(self.lines), 3):
+        for index in range(3, len(self.data.lines), 3):
             # Make thick lines
-            self.grid.itemconfig(self.lines[index], width=2)
+            self.grid.itemconfig(self.data.lines[index], width=2)
 
         # Update and render
         self.background.bind("<Configure>", self.onResize)
@@ -170,12 +171,12 @@ class RenderBoard:
             # Horizontal lines
             if index <= 8:
                 self.grid.coords(
-                    self.lines[index], 0, (minSize*(self.scale*index)), minSize, (minSize*(self.scale*index)))
+                    self.data.lines[index], 0, (minSize*(self.scale*index)), minSize, (minSize*(self.scale*index)))
 
             # Vertical line
             else:
                 self.grid.coords(
-                    self.lines[index], (minSize*(self.scale*(index-9))), 0,  (minSize*(self.scale*(index-9))), minSize)
+                    self.data.lines[index], (minSize*(self.scale*(index-9))), 0,  (minSize*(self.scale*(index-9))), minSize)
 
         # Buttons
         size = (minSize/9) - 3
@@ -232,11 +233,12 @@ class RenderBoard:
             root.update()
 
     def renderLines(self):
-        self.lines = []
-        for loop in range(18):
-            # Horizontal lines
-            self.lines.append(self.grid.create_line(
-                0, (41*loop), 396, (41*loop), width=1))
+        for _ in range(18):
+
+            # Makes all lines
+            # Cordinates updates imidetly inside
+            # onRezise, no need to be exact
+            self.data.lines.append(self.grid.create_line(0, 41, 396, 41))
 
 
 class Game:
