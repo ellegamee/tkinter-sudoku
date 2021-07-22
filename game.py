@@ -1,5 +1,6 @@
 from tkinter import Tk, IntVar, Canvas, Button, BOTH, YES
 import random
+from functools import partial
 
 
 class DataBase:
@@ -207,7 +208,7 @@ class RenderBoard:
             # Todo remove small grey outline around buttons
             self.data.button.append(
                 Button(self.grid, name=str(index), font=(
-                    "consolas", 18, "bold"), relief="flat", bg="white", command=self.changeNumber)
+                    "consolas", 18, "bold"), relief="flat", bg="white", command=partial(self.changeNumber, index))
             )
 
             # Frame Cordinates
@@ -231,8 +232,9 @@ class RenderBoard:
         if renderInstant == True:
             root.update()
 
-    def changeNumber(self):
+    def changeNumber(self, index):
         print("Button pressed")
+        print("Index:", index)
 
     def renderLines(self):
         self.lines = []
