@@ -207,7 +207,7 @@ class RenderBoard:
             # Todo remove small grey outline around buttons
             self.data.button.append(
                 Button(self.grid, name=str(index), font=(
-                    "consolas", 18, "bold"), relief="flat", bg="white")
+                    "consolas", 18, "bold"), relief="flat", bg="white", command=self.changeNumber)
             )
 
             # Frame Cordinates
@@ -231,8 +231,8 @@ class RenderBoard:
         if renderInstant == True:
             root.update()
 
-    def changeOfNumber(self):
-        pass
+    def changeNumber(self):
+        print("Button pressed")
 
     def renderLines(self):
         self.lines = []
