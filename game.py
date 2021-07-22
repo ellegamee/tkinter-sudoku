@@ -1,4 +1,4 @@
-from tkinter import Tk, IntVar, Canvas, BOTH, YES, Button
+from tkinter import Tk, IntVar, Canvas, Button, BOTH, YES
 import random
 
 
@@ -230,6 +230,9 @@ class RenderBoard:
         # Instant render
         if renderInstant == True:
             root.update()
+
+    def changeOfNumber(self):
+        pass
 
     def renderLines(self):
         self.lines = []
