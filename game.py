@@ -1,6 +1,7 @@
 from tkinter import Tk, IntVar, Canvas, Button, BOTH, YES
-import random
 from functools import partial
+import random
+import keyboard
 
 
 class DataBase:
@@ -208,7 +209,7 @@ class RenderBoard:
             # Todo remove small grey outline around buttons
             self.data.button.append(
                 Button(self.grid, name=str(index), font=(
-                    "consolas", 18, "bold"), relief="flat", bg="white", command=partial(self.changeNumber, index))
+                    "consolas", 18, "bold"), relief="flat", bg="white", command=partial(self.changeNumber, root, index))
             )
 
             # Frame Cordinates
@@ -232,9 +233,27 @@ class RenderBoard:
         if renderInstant == True:
             root.update()
 
-    def changeNumber(self, index):
+    def changeNumber(self, root, index):
+        self.root = root
+
+        def keyboardPress(self):
+            loop = True
+            while loop:
+
+                for number in self.data.validNumbers:
+                    if keyboard.is_pressed(str(number)):
+                        loop == False
+                        return number
+
         print("Button pressed")
         print("Index:", index)
+
+        key = keyboardPress(self)
+        print("Got keyboard input!:", key)
+        print()
+
+        self.data.data[index].set(key)
+        self.data.button[index]["text"] = key
 
     def renderLines(self):
         self.lines = []
