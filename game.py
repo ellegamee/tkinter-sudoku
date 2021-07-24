@@ -6,6 +6,7 @@ import keyboard
 
 class DataBase:
     def __init__(self, root):
+        self.currentlyEditting = None
         self.validNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
         self.boardAnswer = []
         self.button = []
@@ -209,7 +210,7 @@ class RenderBoard:
             # Todo remove small grey outline around buttons
             self.data.button.append(
                 Button(self.grid, name=str(index), font=(
-                    "consolas", 18, "bold"), relief="flat", bg="white", command=partial(self.changeNumber, root, index))
+                    "consolas", 18, "bold"), relief="flat", bg="white", command=partial(self.changeNumber, index))
             )
 
             # Frame Cordinates
@@ -233,27 +234,16 @@ class RenderBoard:
         if renderInstant == True:
             root.update()
 
-    def changeNumber(self, root, index):
-        self.root = root
+    def triggerEditting(self, index):
+        if self.data.currentlyEditting == None:
+            self.data.currentlyEditting = index
 
-        def keyboardPress(self):
-            loop = True
-            while loop:
+        else:
+            self.data.currentlyEditting = index
 
-                for number in self.data.validNumbers:
-                    if keyboard.is_pressed(str(number)):
-                        loop == False
-                        return number
-
-        print("Button pressed")
-        print("Index:", index)
-
-        key = keyboardPress(self)
-        print("Got keyboard input!:", key)
-        print()
-
-        self.data.data[index].set(key)
-        self.data.button[index]["text"] = key
+    def changeNumber(self, key):
+        self.data.data[self.data.currentlyEditting].set(self.key)
+        self.data.button[self.data.currentlyEditting]["text"] = self.key
 
     def renderLines(self):
         self.lines = []
@@ -272,6 +262,12 @@ class Game:
     def __init__(self, root):
         self.data = DataBase(root)
         self.board = RenderBoard(root, self.data)
+        keyboard.on_press(self.keyboardPress)
+
+    # Runs when keyboard button is
+    def keyboardPress(self, event):
+        if int(event.name) in self.data.validNumbers:
+            self.board.changeNumber(int(event.name))
 
 
 # Game window properties
