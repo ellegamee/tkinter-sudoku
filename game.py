@@ -203,7 +203,7 @@ class RenderBoard:
             # Button information
             self.data.button.append(
                 Button(self.grid, name=str(index), font=(
-                    "consolas", 18, "bold"), relief="flat", bg="white", activebackground='lightgray', bd=0)
+                    "consolas", 18, "bold"), relief="flat", bg="white", activebackground='white', bd=0)
             )
 
             # Frame Cordinates
