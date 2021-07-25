@@ -233,26 +233,36 @@ class RenderBoard:
     def triggerEditting(self, index):
         # When button is not pressed
         if self.data.currentlyEditting == None:
-            self.data.currentlyEditting = index
+            self.data.currentlyEditting = [index]
             self.data.button[index].configure(bg="lightgray")
+
+        # Multiselection buttons
+        elif keyboard.is_pressed("ctrl"):
+            self.data.button[index].configure(bg="lightgray")
+
+            # If the button is not in edit list
+            if index not in self.data.currentlyEditting:
+                self.data.currentlyEditting.append(index)
 
         # Previous button still toggeld
         else:
-            self.data.button[self.data.currentlyEditting].configure(bg="white")
-            self.data.currentlyEditting = index
-            self.data.button[index].configure(bg="lightgray")
+            for editIndex in self.data.currentlyEditting:
+                self.data.button[editIndex].configure(bg="white")
+                self.data.currentlyEditting = [index]
+                self.data.button[index].configure(bg="lightgray")
 
     def changeNumber(self, key):
         print("keyboard:", key)
         print(f"index button: {self.data.currentlyEditting}\n")
 
-        # Changing the number in database and on button
-        self.data.data[self.data.currentlyEditting].set(key)
-        self.data.button[self.data.currentlyEditting]["text"] = key
+        for editIndex in self.data.currentlyEditting:
+            # Changing the number in database and on button
+            self.data.data[editIndex].set(key)
+            self.data.button[editIndex]["text"] = key
 
-        # Deselecting button after new number is placed
-        self.data.button[self.data.currentlyEditting].configure(bg="white")
-        self.data.currentlyEditting = None
+            # Deselecting button after new number is placed
+            self.data.button[editIndex].configure(bg="white")
+            self.data.currentlyEditting = None
 
     def renderLines(self):
         for _ in range(18):
