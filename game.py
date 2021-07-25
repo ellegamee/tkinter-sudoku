@@ -210,7 +210,7 @@ class RenderBoard:
             # Todo remove small grey outline around buttons
             self.data.button.append(
                 Button(self.grid, name=str(index), font=(
-                    "consolas", 18, "bold"), relief="flat", bg="white", command=partial(self.changeNumber, index))
+                    "consolas", 18, "bold"), relief="flat", bg="white", command=partial(self.triggerEditting, index))
             )
 
             # Frame Cordinates
@@ -237,13 +237,21 @@ class RenderBoard:
     def triggerEditting(self, index):
         if self.data.currentlyEditting == None:
             self.data.currentlyEditting = index
+            self.data.button[index].configure(bg="lightgray")
 
         else:
+            self.data.button[self.data.currentlyEditting].configure(bg="white")
             self.data.currentlyEditting = index
+            self.data.button[index].configure(bg="lightgray")
 
     def changeNumber(self, key):
-        self.data.data[self.data.currentlyEditting].set(self.key)
-        self.data.button[self.data.currentlyEditting]["text"] = self.key
+        print(key)
+        print(self.data.currentlyEditting)
+        self.data.data[self.data.currentlyEditting].set(key)
+        self.data.button[self.data.currentlyEditting]["text"] = key
+
+        self.data.button[self.data.currentlyEditting].configure(bg="white")
+        self.data.currentlyEditting = None
 
     def renderLines(self):
         self.lines = []
@@ -266,7 +274,7 @@ class Game:
 
     # Runs when keyboard button is
     def keyboardPress(self, event):
-        if int(event.name) in self.data.validNumbers:
+        if event.name.isdigit() and int(event.name) in self.data.validNumbers and self.data.currentlyEditting != None:
             self.board.changeNumber(int(event.name))
 
 
