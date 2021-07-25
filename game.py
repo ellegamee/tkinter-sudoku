@@ -1,9 +1,12 @@
-from tkinter import Tk, IntVar, Canvas, BOTH, YES, Button, font
+from tkinter import Tk, IntVar, Canvas, Button, BOTH, YES
+from functools import partial
 import random
+import keyboard
 
 
 class DataBase:
     def __init__(self, root):
+        self.currentlyEditting = None
         self.validNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
         self.boardAnswer = []
         self.button = []
@@ -202,8 +205,8 @@ class RenderBoard:
         for index in range(81):
             # Button information
             self.data.button.append(
-                Button(self.grid, name=str(index), font=(
-                    "consolas", 18, "bold"), relief="flat", bg="white", activebackground='white', bd=0)
+                Button(self.grid, name=str(index), font=("consolas", 18, "bold"), relief="flat",
+                       bg="white", bd=0, activebackground='white', command=partial(self.triggerEditting, index))
             )
 
             # Frame Cordinates
@@ -227,6 +230,25 @@ class RenderBoard:
         if renderInstant == True:
             root.update()
 
+    def triggerEditting(self, index):
+        if self.data.currentlyEditting == None:
+            self.data.currentlyEditting = index
+            self.data.button[index].configure(bg="lightgray")
+
+        else:
+            self.data.button[self.data.currentlyEditting].configure(bg="white")
+            self.data.currentlyEditting = index
+            self.data.button[index].configure(bg="lightgray")
+
+    def changeNumber(self, key):
+        print(key)
+        print(self.data.currentlyEditting)
+        self.data.data[self.data.currentlyEditting].set(key)
+        self.data.button[self.data.currentlyEditting]["text"] = key
+
+        self.data.button[self.data.currentlyEditting].configure(bg="white")
+        self.data.currentlyEditting = None
+
     def renderLines(self):
         for _ in range(18):
 
@@ -240,6 +262,12 @@ class Game:
     def __init__(self, root):
         self.data = DataBase(root)
         self.board = RenderBoard(root, self.data)
+        keyboard.on_press(self.keyboardPress)
+
+    # Runs when keyboard button is
+    def keyboardPress(self, event):
+        if event.name.isdigit() and int(event.name) in self.data.validNumbers and self.data.currentlyEditting != None:
+            self.board.changeNumber(int(event.name))
 
 
 # Game window properties
