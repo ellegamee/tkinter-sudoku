@@ -231,21 +231,26 @@ class RenderBoard:
             root.update()
 
     def triggerEditting(self, index):
+        # When button is not pressed
         if self.data.currentlyEditting == None:
             self.data.currentlyEditting = index
             self.data.button[index].configure(bg="lightgray")
 
+        # Previous button still toggeld
         else:
             self.data.button[self.data.currentlyEditting].configure(bg="white")
             self.data.currentlyEditting = index
             self.data.button[index].configure(bg="lightgray")
 
     def changeNumber(self, key):
-        print(key)
-        print(self.data.currentlyEditting)
+        print("keyboard:", key)
+        print(f"index button: {self.data.currentlyEditting}\n")
+
+        # Changing the number in database and on button
         self.data.data[self.data.currentlyEditting].set(key)
         self.data.button[self.data.currentlyEditting]["text"] = key
 
+        # Deselecting button after new number is placed
         self.data.button[self.data.currentlyEditting].configure(bg="white")
         self.data.currentlyEditting = None
 
@@ -275,6 +280,5 @@ root = Tk()
 root.title("Soduko Game")
 root.geometry("608x446")
 
-print("loading....")
 game = Game(root)
 root.mainloop()
