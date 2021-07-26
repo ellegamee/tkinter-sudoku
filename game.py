@@ -279,20 +279,22 @@ class Game:
         self.board = RenderBoard(root, self.data)
         keyboard.on_press(self.keyboardPress)
 
-    # Runs when keyboard button is
+    # Runs when keyboard button is pressed
     def keyboardPress(self, event):
+        
+        #If 1 to 9 is pressed
+        #Sends key to changeNumber
         if event.name.isdigit() and int(event.name) in self.data.validNumbers and self.data.currentlyEditting != None:
             self.board.changeNumber(int(event.name))
         
+        #Clears all selected squares
         elif event.name == 'esc':
             for editIndex in self.data.currentlyEditting:
                 self.data.button[editIndex].configure(bg='white')
 
             self.data.currentlyEditting = None
             
-
-
-
+            
 # Game window properties
 root = Tk()
 root.title('Soduko Game')
