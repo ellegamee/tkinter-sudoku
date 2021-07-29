@@ -1,4 +1,4 @@
-from tkinter import Tk, IntVar, Canvas, Button, BOTH, YES
+from tkinter import Tk, DoubleVar, Canvas, Button, BOTH, YES
 from functools import partial
 import random
 import keyboard
@@ -15,7 +15,7 @@ class DataBase:
 
         # Generating empty varibles
         for index in range(81):
-            self.data.append(IntVar(root, name=str(index)))
+            self.data.append(DoubleVar(root, name=str(index)))
 
         # Start generating
         self.numberGenerator()
@@ -128,6 +128,30 @@ class DataBase:
         else:
             return lst[((column // 3) + (row // 3 * 3))]
 
+class RemoveNumbers:
+    #! Value on the empty buttons is strings
+    #! And not ints as the rest of the buttons
+    
+    #Todo Totally random and makes NON-unique
+    #Todo solutions, needs and improvement
+    
+    def __init__(self, root, data):
+        self.data = data
+        self.root = root
+        self.removed = 0
+        
+        while self.removed <= (81 - 34):
+            index = random.randrange(81)
+            
+            #Check if button is already empty
+            if root.getvar(str(index)) == None:
+                continue
+
+            # Changes the value to empty
+            root.setvar(str(index), value="")
+            self.removed += 1
+            continue
+        
 
 class RenderBoard:
     def __init__(self, root, data):
@@ -276,6 +300,7 @@ class RenderBoard:
 class Game:
     def __init__(self, root): 
         self.data = DataBase(root)
+        self.removeNum = RemoveNumbers(root, self.data)
         self.board = RenderBoard(root, self.data)
         keyboard.on_press(self.keyboardPress)
 
