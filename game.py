@@ -1,4 +1,4 @@
-from tkinter import Tk, IntVar, Canvas, Button, BOTH, YES
+from tkinter import Tk, DoubleVar, Canvas, Button, BOTH, YES
 from functools import partial
 import random
 import keyboard
@@ -15,7 +15,7 @@ class DataBase:
 
         # Generating empty varibles
         for index in range(81):
-            self.data.append(IntVar(root, name=str(index)))
+            self.data.append(DoubleVar(root, name=str(index)))
 
         # Start generating
         self.numberGenerator()
@@ -128,6 +128,30 @@ class DataBase:
         else:
             return lst[((column // 3) + (row // 3 * 3))]
 
+class RemoveNumbers:
+    #! Value on the empty buttons is strings
+    #! And not ints as the rest of the buttons
+    
+    #Todo Totally random and makes NON-unique
+    #Todo solutions, needs and improvement
+    
+    def __init__(self, root, data):
+        self.data = data
+        self.root = root
+        self.removed = 0
+        
+        while self.removed <= (81 - 34):
+            index = random.randrange(81)
+            
+            #Check if button is already empty
+            if root.getvar(str(index)) == None:
+                continue
+
+            # Changes the value to empty
+            root.setvar(str(index), value="")
+            self.removed += 1
+            continue
+        
 
 class RenderBoard:
     def __init__(self, root, data):
@@ -237,7 +261,7 @@ class RenderBoard:
             self.data.button[index].configure(bg='lightgray')
 
         # Multiselection buttons
-        elif keyboard.is_pressed("ctrl"):
+        elif keyboard.is_pressed('ctrl'):
             self.data.button[index].configure(bg='lightgray')
 
             # If the button is not in edit list
@@ -252,8 +276,8 @@ class RenderBoard:
                 self.data.button[index].configure(bg='lightgray')
 
     def changeNumber(self, key):
-        print("keyboard:", key)
-        print(f"index button: {self.data.currentlyEditting}\n")
+        print('keyboard:', key)
+        print(f'index button: {self.data.currentlyEditting}\n')
 
         for editIndex in self.data.currentlyEditting:
             # Changing the number in database and on button
@@ -276,14 +300,19 @@ class RenderBoard:
 class Game:
     def __init__(self, root): 
         self.data = DataBase(root)
+        self.removeNum = RemoveNumbers(root, self.data)
         self.board = RenderBoard(root, self.data)
         keyboard.on_press(self.keyboardPress)
 
-    # Runs when keyboard button is
+    # Runs when keyboard button is pressed
     def keyboardPress(self, event):
+        
+        #If 1 to 9 is pressed
+        #Sends key to changeNumber
         if event.name.isdigit() and int(event.name) in self.data.validNumbers and self.data.currentlyEditting != None:
             self.board.changeNumber(int(event.name))
-        
+
+        #Clears all selected squares
         elif event.name == 'esc':
             for editIndex in self.data.currentlyEditting:
                 self.data.button[editIndex].configure(bg='white')
