@@ -138,9 +138,9 @@ class RenderBoard:
 
         # Canvas
         self.background = Canvas(
-            root, bg="gray", height=root.winfo_height(), width=root.winfo_width())
+            root, bg='gray', height=root.winfo_height(), width=root.winfo_width())
 
-        self.grid = Canvas(self.background, bg="white", width=(
+        self.grid = Canvas(self.background, bg='white', width=(
             root.winfo_height()-40), height=(root.winfo_height()-40))
 
         # Lines
@@ -150,7 +150,7 @@ class RenderBoard:
             self.grid.itemconfig(self.data.lines[index], width=2)
 
         # Update and render
-        self.background.bind("<Configure>", self.onResize)
+        self.background.bind('<Configure>', self.onResize)
         self.background.pack(fill=BOTH, expand=YES)
         self.grid.place(x=20, y=20)
 
@@ -194,7 +194,7 @@ class RenderBoard:
 
             # Update number font/size
             self.data.button[index].configure(
-                font=("consolas", int(minSize/9*0.4), "bold"))
+                font=('consolas', int(minSize/9*0.4), 'bold'))
 
             count += 1
 
@@ -205,8 +205,8 @@ class RenderBoard:
         for index in range(81):
             # Button information
             self.data.button.append(
-                Button(self.grid, name=str(index), font=("consolas", 18, "bold"), relief="flat",
-                       bg="white", bd=0, activebackground='white', command=partial(self.triggerEditting, index))
+                Button(self.grid, name=str(index), font=('consolas', 18, 'bold'), relief='flat',
+                       bg='white', bd=0, activebackground='white', command=partial(self.triggerEditting, index))
             )
 
             # Frame Cordinates
@@ -218,7 +218,7 @@ class RenderBoard:
                 x=2+(count*45), y=yCord, width=42, height=42)
 
             # Animate numbers
-            self.data.button[index]["text"] = root.getvar(str(index))
+            self.data.button[index]['text'] = root.getvar(str(index))
 
             if renderInstant == False:
                 root.update()
@@ -234,11 +234,11 @@ class RenderBoard:
         # When button is not pressed
         if self.data.currentlyEditting == None:
             self.data.currentlyEditting = [index]
-            self.data.button[index].configure(bg="lightgray")
+            self.data.button[index].configure(bg='lightgray')
 
         # Multiselection buttons
         elif keyboard.is_pressed("ctrl"):
-            self.data.button[index].configure(bg="lightgray")
+            self.data.button[index].configure(bg='lightgray')
 
             # If the button is not in edit list
             if index not in self.data.currentlyEditting:
@@ -247,9 +247,9 @@ class RenderBoard:
         # Previous button still toggeld
         else:
             for editIndex in self.data.currentlyEditting:
-                self.data.button[editIndex].configure(bg="white")
+                self.data.button[editIndex].configure(bg='white')
                 self.data.currentlyEditting = [index]
-                self.data.button[index].configure(bg="lightgray")
+                self.data.button[index].configure(bg='lightgray')
 
     def changeNumber(self, key):
         print("keyboard:", key)
@@ -258,10 +258,10 @@ class RenderBoard:
         for editIndex in self.data.currentlyEditting:
             # Changing the number in database and on button
             self.data.data[editIndex].set(key)
-            self.data.button[editIndex]["text"] = key
+            self.data.button[editIndex]['text'] = key
 
             # Deselecting button after new number is placed
-            self.data.button[editIndex].configure(bg="white")
+            self.data.button[editIndex].configure(bg='white')
             self.data.currentlyEditting = None
 
     def renderLines(self):
@@ -284,19 +284,16 @@ class Game:
         if event.name.isdigit() and int(event.name) in self.data.validNumbers and self.data.currentlyEditting != None:
             self.board.changeNumber(int(event.name))
         
-        elif event.name == "esc":
+        elif event.name == 'esc':
             for editIndex in self.data.currentlyEditting:
-                self.data.button[editIndex].configure(bg="white")
+                self.data.button[editIndex].configure(bg='white')
 
             self.data.currentlyEditting = None
-            
-
-
 
 # Game window properties
 root = Tk()
-root.title("Soduko Game")
-root.geometry("608x446")
+root.title('Soduko Game')
+root.geometry('608x446')
 
 game = Game(root)
 root.mainloop()
