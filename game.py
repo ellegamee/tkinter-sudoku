@@ -3,7 +3,6 @@ from functools import partial
 import random
 import keyboard
 
-
 class DataBase:
     def __init__(self, root):
         self.data = [DoubleVar(root, name=str(index)) for index in range(81)]
@@ -102,7 +101,6 @@ class DataBase:
                 # Move start to next index
                 start += 1
                 end += 1
-
             # When first 3 or 6 subsquares are done
             if listKey == 2 or listKey == 5:
                 start += 18
@@ -157,14 +155,12 @@ class RenderBoard:
         # Canvas for grid
         self.grid = Canvas(self.bg, bg='white', width=(root.winfo_height()-40), height=(root.winfo_height()-40))
                 
-        # Makes lines
-        for index in range(18):
-            self.data.lines.append(self.grid.create_line(0, 0, 0, 0))
-            
-            #Every third gets thicker
-            if index % 3 == 0:
-                self.grid.itemconfig(self.data.lines[index], width=2)    
+        # Makes lines and everythird is 2px thick
+        self.data.lines = [self.grid.create_line(0, 0, 0, 0) for _ in range(18)]
         
+        for line in [i for i in range(18) if i % 3 == 0]:
+            self.grid.itemconfig(self.data.lines[line], width=2)
+
         #Good ones
         self.bg.pack(fill=BOTH, expand=YES)
         self.grid.place(x=20, y=20)
@@ -293,7 +289,7 @@ class RenderBoard:
 class Game:
     def __init__(self, root):
         self.data = DataBase(root)
-        #self.removeNum = RemoveNumbers(root, self.data)
+        self.removeNum = RemoveNumbers(root, self.data)
         self.board = RenderBoard(root, self.data)
         keyboard.on_press(self.keyboardPress)
 
