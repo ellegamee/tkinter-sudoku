@@ -156,103 +156,67 @@ class RemoveNumbers:
 class RenderBoard:
     def __init__(self, root, data):
         # Vars
+        self.instantAnimation = False
         self.data = data
         self.root = root
-        self.scale = 100/9-11
-
-        # Canvas
-        self.background = Canvas(
-            root, bg='gray', height=root.winfo_height(), width=root.winfo_width())
-
-        self.grid = Canvas(self.background, bg='white', width=(
-            root.winfo_height()-40), height=(root.winfo_height()-40))
-
-        # Lines
-        self.renderLines()
-        for index in range(3, len(self.data.lines), 3):
-            # Make thick lines
-            self.grid.itemconfig(self.data.lines[index], width=2)
-
-        # Update and render
-        self.background.bind('<Configure>', self.onResize)
-        self.background.pack(fill=BOTH, expand=YES)
-        self.grid.place(x=20, y=20)
-
-        # If true, numbers will render instant
-        self.renderNumbers(root, True)
+        
+        #Must do
+        root.resizable(False, False)
         root.update()
+        
+        # Canvas for background
+        self.bg = Canvas(root, bg='gray', height=root.winfo_height(), width=root.winfo_width())
+        
+        # Canvas for grid
+        self.grid = Canvas(self.bg, bg='white', width=(root.winfo_height()-40), height=(root.winfo_height()-40))
+                
+        # Makes lines
+        for index in range(18):
+            self.data.lines.append(self.grid.create_line(0, 0, 0, 0))
+            
+            #Every third gets thicker
+            if index % 3 == 0:
+                self.grid.itemconfig(self.data.lines[index], width=2)    
+        
+        #Good ones
+        self.bg.pack(fill=BOTH, expand=YES)
+        self.grid.place(x=20, y=20)
+        self.lineCordinates()
+        
+        # If true, numbers will render instant
+        self.makeButtons()
+        self.animateButtons()
+        
+        root.resizable(True, True)
+        self.bg.bind('<Configure>', self.onResize)
+    
+    
+    def makeButtons(self):
+        for index in range(81):
+            # Button information
+            self.data.button.append(
+                Button(self.grid, name=str(index), font=('consolas', 18,'bold'),relief='flat', bg='white', bd=0, activebackground='white', command=partial(self.triggerEditting, index))
+            )
 
-    def onResize(self, event):
-        minSize = min(event.width, event.height) - 40
+            # Update the text on the button from database
+            self.data.button[index]['text'] = self.root.getvar(str(index))
+            
 
-        # Canvas
-        self.grid.config(width=minSize, height=minSize)
-
-        # Lines
-        # ? Shorten the cordinates
+    def lineCordinates(self):
+        scale = 100/9-11
+        minSize = min(self.root.winfo_height()-40, self.root.winfo_width()-40)
+        
         for index in range(18):
             # Horizontal lines
             if index <= 8:
                 self.grid.coords(
-                    self.data.lines[index], 0, (minSize*(self.scale*index)), minSize, (minSize*(self.scale*index)))
+                    self.data.lines[index], 0, (minSize*(scale*index)), minSize, (minSize*(scale*index)))
 
             # Vertical line
             else:
                 self.grid.coords(
-                    self.data.lines[index], (minSize*(self.scale*(index-9))), 0,  (minSize*(self.scale*(index-9))), minSize)
-
-        # Buttons
-        size = (minSize/9) - 3
-        yCord = 2
-        count = 0
-
-        # ? Shorten the for loop
-        for index in range(81):
-            if index % 9 == 0 and index != 0:
-                yCord += minSize/9
-                count = 0
-
-            # Update button place
-            self.data.button[index].place(
-                x=2+(count*(minSize/9)), y=yCord, width=size, height=size)
-
-            # Update number font/size
-            self.data.button[index].configure(
-                font=('consolas', int(minSize/9*0.4), 'bold'))
-
-            count += 1
-
-    def renderNumbers(self, root, renderInstant):
-        yCord = 2
-        count = 0
-
-        for index in range(81):
-            # Button information
-            self.data.button.append(
-                Button(self.grid, name=str(index), font=('consolas', 18, 'bold'), relief='flat',
-                       bg='white', bd=0, activebackground='white', command=partial(self.triggerEditting, index))
-            )
-
-            # Frame Cordinates
-            if index % 9 == 0 and index != 0:
-                yCord += 45
-                count = 0
-
-            self.data.button[index].place(
-                x=2+(count*45), y=yCord, width=42, height=42)
-
-            # Animate numbers
-            self.data.button[index]['text'] = root.getvar(str(index))
-
-            if renderInstant == False:
-                root.update()
-                root.after(20)
-
-            count += 1
-
-        # Instant render
-        if renderInstant == True:
-            root.update()
+                    self.data.lines[index], (minSize*(scale*(index-9))), 0,  (minSize*(scale*(index-9))), minSize)
+                
 
     def triggerEditting(self, index):
         # When button is not pressed
@@ -275,6 +239,7 @@ class RenderBoard:
                 self.data.currentlyEditting = [index]
                 self.data.button[index].configure(bg='lightgray')
 
+
     def changeNumber(self, key):
         print('keyboard:', key)
         print(f'index button: {self.data.currentlyEditting}\n')
@@ -287,18 +252,63 @@ class RenderBoard:
             # Deselecting button after new number is placed
             self.data.button[editIndex].configure(bg='white')
             self.data.currentlyEditting = None
+           
+            
+    def animateButtons(self):
+        yCord = 2
+        count = 0
+        
+        for index in range(81):
+            if self.data.button[index] != "":            
+                
+                # Button Cordinates
+                if index % 9 == 0 and index != 0:
+                    yCord += 45
+                    count = 0
 
-    def renderLines(self):
-        for _ in range(18):
+                self.data.button[index].place(x=2+(count*45), y=yCord, width=42, height=42)
+            
+                # Render one by a time
+                if self.instantAnimation == False:
+                    root.update()
+                    root.after(20)
+                
+                count += 1
 
-            # Makes all lines
-            # Cordinates updates imidetly inside
-            # onRezise, no need to be exact
-            self.data.lines.append(self.grid.create_line(0, 41, 396, 41))
+        # Instant render
+        if self.instantAnimation == True:
+            root.update()
 
+
+    def onResize(self, event):
+        minSize = min(event.width, event.height) - 40
+        
+        self.grid.config(width=minSize, height=minSize)
+        self.lineCordinates()
+
+        # Buttons
+        
+        size = (minSize/9) - 3
+        yCord = 2
+        count = 0
+  
+        for index in range(81):
+            
+            if index % 9 == 0 and index != 0:
+                yCord += minSize/9
+                count = 0
+            
+            xCord = 2+(count*(minSize/9))
+            
+            # Update place
+            button = self.data.button[index]
+            button.place(x=xCord, y=yCord, width=size, height=size)
+            button.configure(font=('consolas', int(minSize/9*0.4), 'bold'))
+
+            count += 1
 
 class Game:
-    def __init__(self, root): 
+    def __init__(self, root):
         self.data = DataBase(root)
         self.removeNum = RemoveNumbers(root, self.data)
         self.board = RenderBoard(root, self.data)
