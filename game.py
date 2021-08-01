@@ -190,18 +190,6 @@ class RenderBoard:
         root.resizable(True, True)
         self.bg.bind('<Configure>', self.onResize)
     
-    
-    def makeButtons(self):
-        for index in range(81):
-            # Button information
-            self.data.button.append(
-                Button(self.grid, name=str(index), font=('consolas', 18,'bold'),relief='flat', bg='white', bd=0, activebackground='white', command=partial(self.triggerEditting, index))
-            )
-
-            # Update the text on the button from database
-            self.data.button[index]['text'] = self.root.getvar(str(index))
-            
-
     def lineCordinates(self):
         scale = 100/9-11
         minSize = min(self.root.winfo_height()-40, self.root.winfo_width()-40)
@@ -217,7 +205,73 @@ class RenderBoard:
                 self.grid.coords(
                     self.data.lines[index], (minSize*(scale*(index-9))), 0,  (minSize*(scale*(index-9))), minSize)
                 
+                
+    def makeButtons(self):
+        for index in range(81):
+            # Button information
+            self.data.button.append(
+                Button(self.grid, name=str(index), font=('consolas', 18,'bold'),relief='flat', bg='white', bd=0, activebackground='white', command=partial(self.triggerEditting, index))
+            )
 
+            # Update the text on the button from database
+            self.data.button[index]['text'] = self.root.getvar(str(index))
+       
+            
+    def animateButtons(self):
+        yCord = 2
+        count = 0
+        
+        for index, button in enumerate(self.data.button):
+            if button != "":            
+                
+                # Button Cordinates
+                if index % 9 == 0 and index != 0:
+                    yCord += 45
+                    count = 0
+
+                xCord = 2+(count*45)
+                button.place(x=xCord, y=yCord, width=42, height=42)
+                count += 1
+                
+                # Render one by a time
+                if self.instantAnimation == False:
+                    root.update()
+                    root.after(20)
+                
+                #Render instant
+                if self.instantAnimation == True and index == 81:
+                    root.update()
+            
+        
+            
+    def onResize(self, event):
+        minSize = min(event.width, event.height) - 40
+        
+        self.grid.config(width=minSize, height=minSize)
+        self.lineCordinates()
+
+        # Buttons
+        size = (minSize/9) - 3
+        yCord = 2
+        count = 0
+  
+        for index in range(81):
+            
+            if index % 9 == 0 and index != 0:
+                yCord += minSize/9
+                count = 0
+            
+            xCord = 2+(count*(minSize/9))
+            
+            # Update place
+            button = self.data.button[index]
+            button.place(x=xCord, y=yCord, width=size, height=size)
+            button.configure(font=('consolas', int(minSize/9*0.4), 'bold'))
+
+            count += 1
+
+    #TODO Change position, place it in game or new class
+    #TODO Maybe inside game even, need index to be global
     def triggerEditting(self, index):
         # When button is not pressed
         if self.data.currentlyEditting == None:
@@ -252,60 +306,7 @@ class RenderBoard:
             # Deselecting button after new number is placed
             self.data.button[editIndex].configure(bg='white')
             self.data.currentlyEditting = None
-           
             
-    def animateButtons(self):
-        yCord = 2
-        count = 0
-        
-        for index in range(81):
-            if self.data.button[index] != "":            
-                
-                # Button Cordinates
-                if index % 9 == 0 and index != 0:
-                    yCord += 45
-                    count = 0
-
-                self.data.button[index].place(x=2+(count*45), y=yCord, width=42, height=42)
-            
-                # Render one by a time
-                if self.instantAnimation == False:
-                    root.update()
-                    root.after(20)
-                
-                count += 1
-
-        # Instant render
-        if self.instantAnimation == True:
-            root.update()
-
-
-    def onResize(self, event):
-        minSize = min(event.width, event.height) - 40
-        
-        self.grid.config(width=minSize, height=minSize)
-        self.lineCordinates()
-
-        # Buttons
-        
-        size = (minSize/9) - 3
-        yCord = 2
-        count = 0
-  
-        for index in range(81):
-            
-            if index % 9 == 0 and index != 0:
-                yCord += minSize/9
-                count = 0
-            
-            xCord = 2+(count*(minSize/9))
-            
-            # Update place
-            button = self.data.button[index]
-            button.place(x=xCord, y=yCord, width=size, height=size)
-            button.configure(font=('consolas', int(minSize/9*0.4), 'bold'))
-
-            count += 1
 
 class Game:
     def __init__(self, root):
