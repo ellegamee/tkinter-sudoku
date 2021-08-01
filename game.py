@@ -236,10 +236,10 @@ class RenderBoard:
                 # Render one by a time
                 if self.instantAnimation == False:
                     root.update()
-                    root.after(20)
+                    root.after(25)
                 
-                #Render instant
-                if self.instantAnimation == True and index == 81:
+                # Render instant
+                elif self.instantAnimation == True and index == 81:
                     root.update()
             
         
