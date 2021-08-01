@@ -246,7 +246,6 @@ class RenderBoard:
             
     def onResize(self, event):
         minSize = min(event.width, event.height) - 40
-        
         self.grid.config(width=minSize, height=minSize)
         self.lineCordinates()
 
@@ -255,18 +254,18 @@ class RenderBoard:
         yCord = 2
         count = 0
   
-        for index in range(81):
-            
+        for index, button in enumerate(self.data.button):
             if index % 9 == 0 and index != 0:
                 yCord += minSize/9
                 count = 0
             
+            # Vars for button update
             xCord = 2+(count*(minSize/9))
+            fontSize = int(minSize/9*0.4)
             
-            # Update place
-            button = self.data.button[index]
+            #Updates button place/config
             button.place(x=xCord, y=yCord, width=size, height=size)
-            button.configure(font=('consolas', int(minSize/9*0.4), 'bold'))
+            button.configure(font=('consolas', fontSize, 'bold'))
 
             count += 1
 
@@ -329,6 +328,10 @@ class Game:
                 self.data.button[editIndex].configure(bg='white')
 
             self.data.currentlyEditting = None
+        
+        #Quits program
+        elif event.name == 'q':
+            root.destroy()
 
 # Game window properties
 root = Tk()
