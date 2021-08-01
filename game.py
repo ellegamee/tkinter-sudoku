@@ -6,16 +6,12 @@ import keyboard
 
 class DataBase:
     def __init__(self, root):
-        self.currentlyEditting = None
+        self.data = [DoubleVar(root, name=str(index)) for index in range(81)]
         self.validNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        self.currentlyEditting = None
         self.boardAnswer = []
         self.button = []
         self.lines = []
-        self.data = []
-
-        # Generating empty varibles
-        for index in range(81):
-            self.data.append(DoubleVar(root, name=str(index)))
 
         # Start generating
         self.numberGenerator()
@@ -55,7 +51,6 @@ class DataBase:
                     # Clears all values on board
                     for tempIndex in range(81):
                         root.setvar(name=str(tempIndex), value=0)
-
                     index = 0
                     break
 
@@ -63,18 +58,14 @@ class DataBase:
                 loop = False
 
         # Makes the answer sheet for the game
-        for index in range(81):
-            self.boardAnswer.append(root.getvar(str(index)))
+        self.boardAnswer = [root.getvar(str(index)) for index in range(81)]
 
     def getRowFor(self, index, convertToValue):
         start = index // 9 * 9
 
         # Return scenarios
         if convertToValue == True:
-            lstReturn = []
-            for i in range(start, (start + 9)):
-                lstReturn.append(root.getvar(str(i)))
-            return lstReturn
+            return [root.getvar(str(i)) for i in range(start, (start + 9))]
 
         else:
             return list(range(start, (start + 9)))
@@ -84,17 +75,16 @@ class DataBase:
 
         # Return scenarios
         if convertToValue == True:
-            lstReturn = []
-            for i in range(start, (start + 9*9), 9):
-                lstReturn.append(root.getvar(str(i)))
-            return lstReturn
+            return [root.getvar(str(i)) for i in range(start, (start + 9*9), 9)]
 
         else:
             return list(range(start, (start + 9*9), 9))
 
     def getSquareFor(self, index, convertToValue):
-        row = index // 9
-        column = index % 9
+        # r = row
+        # c = column
+        r = index // 9
+        c = index % 9
 
         lst = [[], [], [], [], [], [], [], [], []]
         start = 0
@@ -120,13 +110,10 @@ class DataBase:
 
         # Return scenarios
         if convertToValue == True:
-            lstReturn = []
-            for i in lst[((column // 3) + (row // 3 * 3))]:
-                lstReturn.append(root.getvar(str(i)))
-            return lstReturn
+            return [root.getvar(str(i)) for i in lst[((c // 3) + (r // 3 * 3))]]
 
         else:
-            return lst[((column // 3) + (row // 3 * 3))]
+            return lst[((c // 3) + (r // 3 * 3))]
 
 class RemoveNumbers:
     #! Value on the empty buttons is strings
@@ -156,7 +143,7 @@ class RemoveNumbers:
 class RenderBoard:
     def __init__(self, root, data):
         # Vars
-        self.instantAnimation = False
+        self.instantAnimation = True
         self.data = data
         self.root = root
         
@@ -204,8 +191,7 @@ class RenderBoard:
             else:
                 self.grid.coords(
                     self.data.lines[index], (minSize*(scale*(index-9))), 0,  (minSize*(scale*(index-9))), minSize)
-                
-                
+                       
     def makeButtons(self):
         for index in range(81):
             # Button information
@@ -216,7 +202,6 @@ class RenderBoard:
             # Update the text on the button from database
             self.data.button[index]['text'] = self.root.getvar(str(index))
        
-            
     def animateButtons(self):
         yCord = 2
         count = 0
@@ -241,8 +226,6 @@ class RenderBoard:
                 # Render instant
                 elif self.instantAnimation == True and index == 81:
                     root.update()
-            
-        
             
     def onResize(self, event):
         minSize = min(event.width, event.height) - 40
@@ -310,7 +293,7 @@ class RenderBoard:
 class Game:
     def __init__(self, root):
         self.data = DataBase(root)
-        self.removeNum = RemoveNumbers(root, self.data)
+        #self.removeNum = RemoveNumbers(root, self.data)
         self.board = RenderBoard(root, self.data)
         keyboard.on_press(self.keyboardPress)
 
