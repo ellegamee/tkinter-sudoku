@@ -26,9 +26,9 @@ class DataBase:
             # Todo make generating with traceback method
             random.shuffle(self.validNumbers)
 
-            tempRow = self.getRowFor(index, True)
-            tempColumn = self.getColumnFor(index, True)
-            tempSquare = self.getSquareFor(index, True)
+            tempRow = self.getRowFor(index)
+            tempColumn = self.getColumnFor(index)
+            tempSquare = self.getSquareFor(index)
 
             for count, num in enumerate(self.validNumbers):
 
@@ -59,27 +59,16 @@ class DataBase:
         # Makes the answer sheet for the game
         self.boardAnswer = [root.getvar(str(index)) for index in range(81)]
 
-    def getRowFor(self, index, convertToValue):
+    def getRowFor(self, index):
         start = index // 9 * 9
+        return [root.getvar(str(i)) for i in range(start, (start + 9))]
 
-        # Return scenarios
-        if convertToValue == True:
-            return [root.getvar(str(i)) for i in range(start, (start + 9))]
-
-        else:
-            return list(range(start, (start + 9)))
-
-    def getColumnFor(self, index, convertToValue):
+    def getColumnFor(self, index):
         start = index % 9
+        return [root.getvar(str(i)) for i in range(start, (start + 9*9), 9)]
 
-        # Return scenarios
-        if convertToValue == True:
-            return [root.getvar(str(i)) for i in range(start, (start + 9*9), 9)]
 
-        else:
-            return list(range(start, (start + 9*9), 9))
-
-    def getSquareFor(self, index, convertToValue):
+    def getSquareFor(self, index):
         # r = row
         # c = column
         r = index // 9
@@ -106,12 +95,7 @@ class DataBase:
                 start += 18
                 end += 18
 
-        # Return scenarios
-        if convertToValue == True:
-            return [root.getvar(str(i)) for i in lst[((c // 3) + (r // 3 * 3))]]
-
-        else:
-            return lst[((c // 3) + (r // 3 * 3))]
+        return [root.getvar(str(i)) for i in lst[((c // 3) + (r // 3 * 3))]]
 
 class RemoveNumbers:
     #! Value on the empty buttons is strings
@@ -137,11 +121,10 @@ class RemoveNumbers:
             self.removed += 1
             continue
         
-
-class RenderBoard:
+class Board:
     def __init__(self, root, data):
         # Vars
-        self.instantAnimation = True
+        self.instantAnimation = False
         self.data = data
         self.root = root
         
@@ -168,7 +151,7 @@ class RenderBoard:
         
         # If true, numbers will render instant
         self.makeButtons()
-        self.animateButtons()
+        self.renderButtons()
         
         root.resizable(True, True)
         self.bg.bind('<Configure>', self.onResize)
@@ -198,7 +181,7 @@ class RenderBoard:
             # Update the text on the button from database
             self.data.button[index]['text'] = self.root.getvar(str(index))
        
-    def animateButtons(self):
+    def renderButtons(self):
         yCord = 2
         count = 0
         
@@ -284,13 +267,12 @@ class RenderBoard:
             # Deselecting button after new number is placed
             self.data.button[editIndex].configure(bg='white')
             self.data.currentlyEditting = None
-            
-
+         
 class Game:
     def __init__(self, root):
         self.data = DataBase(root)
         self.removeNum = RemoveNumbers(root, self.data)
-        self.board = RenderBoard(root, self.data)
+        self.board = Board(root, self.data)
         keyboard.on_press(self.keyboardPress)
 
     # Runs when keyboard button is pressed
