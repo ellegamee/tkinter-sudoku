@@ -2,6 +2,7 @@ from tkinter import Tk, DoubleVar, Canvas, Button, BOTH, YES
 from functools import partial
 import random
 import keyboard
+import requests
 
 class DataBase:
     def __init__(self, root):
@@ -267,11 +268,26 @@ class Board:
             # Deselecting button after new number is placed
             self.data.button[editIndex].configure(bg='white')
             self.data.currentlyEditting = None
-         
+
+class Multiplayer():
+    def __init__(self, root, data):
+        self.data = data
+        self.root = root
+        self.pushToCloudflare()
+    
+    def pushToCloudflare(self):
+        gameBoard = requests.put('https://sodukokv.axonov.workers.dev/test', json=[root.getvar(str(index)) for index in range(81)])
+        print(f'cloudflare: {gameBoard}')
+        
+    def getFromCloudflare(self):
+        gameBoard = requests.get('https://sodukokv.axonov.workers.dev/test')
+        print(gameBoard)
+        
 class Game:
     def __init__(self, root):
         self.data = DataBase(root)
         self.removeNum = RemoveNumbers(root, self.data)
+        self.multiplayer = Multiplayer(root, self.data)
         self.board = Board(root, self.data)
         keyboard.on_press(self.keyboardPress)
 
