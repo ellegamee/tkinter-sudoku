@@ -4,43 +4,43 @@ import random
 import keyboard
 import requests
 
-class DataBase:
+
+class Database:
     def __init__(self, root):
         self.data = [DoubleVar(root, name=str(index)) for index in range(81)]
-        self.validNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-        self.currentlyEditting = None
-        self.boardAnswer = []
+        self.possible_numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        self.editting_now = None
         self.button = []
         self.lines = []
 
         # Start generating
-        self.numberGenerator()
+        self.generate_numbers()
+        self.board_answer = [root.getvar(str(index)) for index in range(81)]
 
-    def numberGenerator(self):
-
+    def generate_numbers(self):
         loop = True
         index = 0
         while loop:
 
+            numbers = self.row_nums(index) + self.column_nums(
+                index) + self.square_nums(index)
+
             # Pinch of randomness
             # Todo make generating with a seed
             # Todo make generating with traceback method
-            random.shuffle(self.validNumbers)
+            random.shuffle(self.possible_numbers)
 
-            tempRow = self.getRowFor(index)
-            tempColumn = self.getColumnFor(index)
-            tempSquare = self.getSquareFor(index)
-
-            for count, num in enumerate(self.validNumbers):
+            for count, num in enumerate(self.possible_numbers):
 
                 check = True
                 # Is it valid to place number or not
-                if num in tempRow or num in tempColumn or num in tempSquare:
+                # ? To long of an if
+                if num in numbers:
                     check = False
 
                 # If okay to set value
                 if check == True:
-                    # Sets value in the dataBase
+                    # Sets value in the Database
                     root.setvar(name=str(index), value=num)
                     index += 1
                     break
@@ -57,19 +57,15 @@ class DataBase:
             if index == 81:
                 loop = False
 
-        # Makes the answer sheet for the game
-        self.boardAnswer = [root.getvar(str(index)) for index in range(81)]
-
-    def getRowFor(self, index):
+    def row_nums(self, index):
         start = index // 9 * 9
         return [root.getvar(str(i)) for i in range(start, (start + 9))]
 
-    def getColumnFor(self, index):
+    def column_nums(self, index):
         start = index % 9
         return [root.getvar(str(i)) for i in range(start, (start + 9*9), 9)]
 
-
-    def getSquareFor(self, index):
+    def square_nums(self, index):
         # r = row
         # c = column
         r = index // 9
@@ -98,22 +94,23 @@ class DataBase:
 
         return [root.getvar(str(i)) for i in lst[((c // 3) + (r // 3 * 3))]]
 
+
 class RemoveNumbers:
     #! Value on the empty buttons is strings
     #! And not ints as the rest of the buttons
-    
-    #Todo Totally random and makes NON-unique
-    #Todo solutions, needs and improvement
-    
+
+    # Todo Totally random and makes NON-unique
+    # Todo solutions, needs and improvement
+
     def __init__(self, root, data):
         self.data = data
         self.root = root
         self.removed = 0
-        
+
         while self.removed <= (81 - 34):
             index = random.randrange(81)
-            
-            #Check if button is already empty
+
+            # Check if button is already empty
             if root.getvar(str(index)) == None:
                 continue
 
@@ -121,46 +118,50 @@ class RemoveNumbers:
             root.setvar(str(index), value="")
             self.removed += 1
             continue
-        
+
+
 class Board:
     def __init__(self, root, data):
         # Vars
         self.instantAnimation = False
         self.data = data
         self.root = root
-        
-        #Must do
+
+        # Must do
         root.resizable(False, False)
         root.update()
-        
+
         # Canvas for background
-        self.bg = Canvas(root, bg='gray', height=root.winfo_height(), width=root.winfo_width())
-        
+        self.bg = Canvas(
+            root, bg='gray', height=root.winfo_height(), width=root.winfo_width())
+
         # Canvas for grid
-        self.grid = Canvas(self.bg, bg='white', width=(root.winfo_height()-40), height=(root.winfo_height()-40))
-                
+        self.grid = Canvas(self.bg, bg='white', width=(
+            root.winfo_height()-40), height=(root.winfo_height()-40))
+
         # Makes lines and everythird is 2px thick
-        self.data.lines = [self.grid.create_line(0, 0, 0, 0) for _ in range(18)]
-        
+        self.data.lines = [self.grid.create_line(
+            0, 0, 0, 0) for _ in range(18)]
+
         for line in [i for i in range(18) if i % 3 == 0]:
             self.grid.itemconfig(self.data.lines[line], width=2)
 
-        #Good ones
+        # Good ones
         self.bg.pack(fill=BOTH, expand=YES)
         self.grid.place(x=20, y=20)
         self.lineCordinates()
-        
+
         # If true, numbers will render instant
         self.makeButtons()
         self.renderButtons()
-        
+
         root.resizable(True, True)
         self.bg.bind('<Configure>', self.onResize)
-    
+
     def lineCordinates(self):
         scale = 100/9-11
         minSize = min(self.root.winfo_height()-40, self.root.winfo_width()-40)
-        
+
         for index in range(18):
             # Horizontal lines
             if index <= 8:
@@ -171,24 +172,25 @@ class Board:
             else:
                 self.grid.coords(
                     self.data.lines[index], (minSize*(scale*(index-9))), 0,  (minSize*(scale*(index-9))), minSize)
-                       
+
     def makeButtons(self):
         for index in range(81):
             # Button information
             self.data.button.append(
-                Button(self.grid, name=str(index), font=('consolas', 18,'bold'),relief='flat', bg='white', bd=0, activebackground='white', command=partial(self.triggerEditting, index))
+                Button(self.grid, name=str(index), font=('consolas', 18, 'bold'), relief='flat',
+                       bg='white', bd=0, activebackground='white', command=partial(self.triggerEditting, index))
             )
 
-            # Update the text on the button from database
+            # Update the text on the button from Database
             self.data.button[index]['text'] = self.root.getvar(str(index))
-       
+
     def renderButtons(self):
         yCord = 2
         count = 0
-        
+
         for index, button in enumerate(self.data.button):
-            if button != "":            
-                
+            if button != "":
+
                 # Button Cordinates
                 if index % 9 == 0 and index != 0:
                     yCord += 45
@@ -197,16 +199,16 @@ class Board:
                 xCord = 2+(count*45)
                 button.place(x=xCord, y=yCord, width=42, height=42)
                 count += 1
-                
+
                 # Render one by a time
                 if self.instantAnimation == False:
                     root.update()
                     root.after(25)
-                
+
                 # Render instant
                 elif self.instantAnimation == True and index == 81:
                     root.update()
-            
+
     def onResize(self, event):
         minSize = min(event.width, event.height) - 40
         self.grid.config(width=minSize, height=minSize)
@@ -216,28 +218,28 @@ class Board:
         size = (minSize/9) - 3
         yCord = 2
         count = 0
-  
+
         for index, button in enumerate(self.data.button):
             if index % 9 == 0 and index != 0:
                 yCord += minSize/9
                 count = 0
-            
+
             # Vars for button update
             xCord = 2+(count*(minSize/9))
             fontSize = int(minSize/9*0.4)
-            
-            #Updates button place/config
+
+            # Updates button place/config
             button.place(x=xCord, y=yCord, width=size, height=size)
             button.configure(font=('consolas', fontSize, 'bold'))
 
             count += 1
 
-    #TODO Change position, place it in game or new class
-    #TODO Maybe inside game even, need index to be global
+    # TODO Change position, place it in game or new class
+    # TODO Maybe inside game even, need index to be global
     def triggerEditting(self, index):
         # When button is not pressed
-        if self.data.currentlyEditting == None:
-            self.data.currentlyEditting = [index]
+        if self.data.editting_now == None:
+            self.data.editting_now = [index]
             self.data.button[index].configure(bg='lightgray')
 
         # Multiselection buttons
@@ -245,70 +247,73 @@ class Board:
             self.data.button[index].configure(bg='lightgray')
 
             # If the button is not in edit list
-            if index not in self.data.currentlyEditting:
-                self.data.currentlyEditting.append(index)
+            if index not in self.data.editting_now:
+                self.data.editting_now.append(index)
 
         # Previous button still toggeld
         else:
-            for editIndex in self.data.currentlyEditting:
+            for editIndex in self.data.editting_now:
                 self.data.button[editIndex].configure(bg='white')
-                self.data.currentlyEditting = [index]
+                self.data.editting_now = [index]
                 self.data.button[index].configure(bg='lightgray')
-
 
     def changeNumber(self, key):
         print('keyboard:', key)
-        print(f'index button: {self.data.currentlyEditting}\n')
+        print(f'index button: {self.data.editting_now}\n')
 
-        for editIndex in self.data.currentlyEditting:
-            # Changing the number in database and on button
+        for editIndex in self.data.editting_now:
+            # Changing the number in Database and on button
             self.data.data[editIndex].set(key)
             self.data.button[editIndex]['text'] = key
 
             # Deselecting button after new number is placed
             self.data.button[editIndex].configure(bg='white')
-            self.data.currentlyEditting = None
+            self.data.editting_now = None
+
 
 class Multiplayer():
     def __init__(self, root, data):
         self.data = data
         self.root = root
         self.pushToCloudflare()
-    
+
     def pushToCloudflare(self):
-        gameBoard = requests.put('https://sodukokv.axonov.workers.dev/test', json=[root.getvar(str(index)) for index in range(81)])
+        gameBoard = requests.put('https://sodukokv.axonov.workers.dev/test',
+                                 json=[root.getvar(str(index)) for index in range(81)])
         print(f'cloudflare: {gameBoard}')
-        
+
     def getFromCloudflare(self):
         gameBoard = requests.get('https://sodukokv.axonov.workers.dev/test')
         print(gameBoard)
-        
+
+
 class Game:
     def __init__(self, root):
-        self.data = DataBase(root)
-        self.removeNum = RemoveNumbers(root, self.data)
+        self.data = Database(root)
+        #self.removeNum = RemoveNumbers(root, self.data)
         self.multiplayer = Multiplayer(root, self.data)
         self.board = Board(root, self.data)
         keyboard.on_press(self.keyboardPress)
 
     # Runs when keyboard button is pressed
     def keyboardPress(self, event):
-        
-        #If 1 to 9 is pressed
-        #Sends key to changeNumber
-        if event.name.isdigit() and int(event.name) in self.data.validNumbers and self.data.currentlyEditting != None:
+
+        # If 1 to 9 is pressed
+        # Sends key to changeNumber
+        if event.name.isdigit() and int(event.name) in self.data.possible_numbers and self.data.editting_now != None:
             self.board.changeNumber(int(event.name))
 
-        #Clears all selected squares
+        # Clears all selected squares
         elif event.name == 'esc':
-            for editIndex in self.data.currentlyEditting:
+            for editIndex in self.data.editting_now:
                 self.data.button[editIndex].configure(bg='white')
 
-            self.data.currentlyEditting = None
-        
-        #Quits program
+            self.data.editting_now = None
+
+        # Quits program
         elif event.name == 'q':
             root.destroy()
+
 
 # Game window properties
 root = Tk()
