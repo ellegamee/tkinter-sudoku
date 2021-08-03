@@ -10,7 +10,7 @@ class Database:
         self.data = [DoubleVar(root, name=str(index)) for index in range(81)]
         self.possible_numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
         self.editting_now = None
-        self.button = []
+        self.buttons = []
         self.lines = []
 
         # Start generating
@@ -18,39 +18,37 @@ class Database:
         self.board_answer = [root.getvar(str(index)) for index in range(81)]
 
     def generate_numbers(self):
+        ''' takes and generates all numbers for a game
+        by using row_nums, column_nums and square_nums
+        wich a random number is compared to and makes
+        in the end a full board
+        '''
+
         loop = True
         index = 0
         while loop:
+            # Pinch of randomness needed for it to work
+            random.shuffle(self.possible_numbers)
 
+            # ? Able to shorten/improve
             numbers = self.row_nums(index) + self.column_nums(
                 index) + self.square_nums(index)
 
-            # Pinch of randomness
-            # Todo make generating with a seed
-            # Todo make generating with traceback method
-            random.shuffle(self.possible_numbers)
-
             for count, num in enumerate(self.possible_numbers):
-
-                check = True
-                # Is it valid to place number or not
-                # ? To long of an if
-                if num in numbers:
-                    check = False
-
-                # If okay to set value
-                if check == True:
-                    # Sets value in the Database
+                # If number is allowd to get put
+                if num not in numbers:
                     root.setvar(name=str(index), value=num)
                     index += 1
                     break
 
                 # If row on gameboard fails to generate
-                if (count + 1) == 9:
+                # ? Push this in one tab
+                if count == 8:
 
-                    # Clears all values on board
-                    for tempIndex in range(81):
-                        root.setvar(name=str(tempIndex), value=0)
+                    # Clears all values on board to 0
+                    for varible in self.data:
+                        varible.set(0)
+
                     index = 0
                     break
 
@@ -58,24 +56,30 @@ class Database:
                 loop = False
 
     def row_nums(self, index):
+        """ returns list with values on row to compare with"""
         start = index // 9 * 9
         return [root.getvar(str(i)) for i in range(start, (start + 9))]
 
     def column_nums(self, index):
+        """ returns list with values on column to compare with"""
         start = index % 9
         return [root.getvar(str(i)) for i in range(start, (start + 9*9), 9)]
 
     def square_nums(self, index):
-        # r = row
-        # c = column
-        r = index // 9
-        c = index % 9
+        """ returns list with values on square to compare with
+        r = row
+        c = column
+        """
 
         lst = [[], [], [], [], [], [], [], [], []]
+        r = index // 9
+        c = index % 9
         start = 0
         end = 18
 
         # Makes all lists
+        # ! THREE FOR LOOPS INSIDE EACH OTHER?!
+        # TODO Search for improvement with the loops
         for listKey in range(9):
 
             # Subsquare index, counts:
@@ -87,6 +91,7 @@ class Database:
                 # Move start to next index
                 start += 1
                 end += 1
+
             # When first 3 or 6 subsquares are done
             if listKey == 2 or listKey == 5:
                 start += 18
@@ -123,7 +128,7 @@ class RemoveNumbers:
 class Board:
     def __init__(self, root, data):
         # Vars
-        self.instantAnimation = False
+        self.instantAnimation = True
         self.data = data
         self.root = root
 
@@ -176,19 +181,19 @@ class Board:
     def makeButtons(self):
         for index in range(81):
             # Button information
-            self.data.button.append(
+            self.data.buttons.append(
                 Button(self.grid, name=str(index), font=('consolas', 18, 'bold'), relief='flat',
                        bg='white', bd=0, activebackground='white', command=partial(self.triggerEditting, index))
             )
 
             # Update the text on the button from Database
-            self.data.button[index]['text'] = self.root.getvar(str(index))
+            self.data.buttons[index]['text'] = self.root.getvar(str(index))
 
     def renderButtons(self):
         yCord = 2
         count = 0
 
-        for index, button in enumerate(self.data.button):
+        for index, button in enumerate(self.data.buttons):
             if button != "":
 
                 # Button Cordinates
@@ -219,7 +224,7 @@ class Board:
         yCord = 2
         count = 0
 
-        for index, button in enumerate(self.data.button):
+        for index, button in enumerate(self.data.buttons):
             if index % 9 == 0 and index != 0:
                 yCord += minSize/9
                 count = 0
@@ -240,11 +245,11 @@ class Board:
         # When button is not pressed
         if self.data.editting_now == None:
             self.data.editting_now = [index]
-            self.data.button[index].configure(bg='lightgray')
+            self.data.buttons[index].configure(bg='lightgray')
 
         # Multiselection buttons
         elif keyboard.is_pressed('ctrl'):
-            self.data.button[index].configure(bg='lightgray')
+            self.data.buttons[index].configure(bg='lightgray')
 
             # If the button is not in edit list
             if index not in self.data.editting_now:
@@ -253,9 +258,9 @@ class Board:
         # Previous button still toggeld
         else:
             for editIndex in self.data.editting_now:
-                self.data.button[editIndex].configure(bg='white')
+                self.data.buttons[editIndex].configure(bg='white')
                 self.data.editting_now = [index]
-                self.data.button[index].configure(bg='lightgray')
+                self.data.buttons[index].configure(bg='lightgray')
 
     def changeNumber(self, key):
         print('keyboard:', key)
@@ -264,10 +269,10 @@ class Board:
         for editIndex in self.data.editting_now:
             # Changing the number in Database and on button
             self.data.data[editIndex].set(key)
-            self.data.button[editIndex]['text'] = key
+            self.data.buttons[editIndex]['text'] = key
 
             # Deselecting button after new number is placed
-            self.data.button[editIndex].configure(bg='white')
+            self.data.buttons[editIndex].configure(bg='white')
             self.data.editting_now = None
 
 
@@ -306,7 +311,7 @@ class Game:
         # Clears all selected squares
         elif event.name == 'esc':
             for editIndex in self.data.editting_now:
-                self.data.button[editIndex].configure(bg='white')
+                self.data.buttons[editIndex].configure(bg='white')
 
             self.data.editting_now = None
 
