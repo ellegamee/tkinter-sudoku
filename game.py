@@ -44,7 +44,6 @@ class Database:
                 # If row on gameboard fails to generate
                 # ? Push this in one tab
                 if count == 8:
-
                     # Clears all values on board to 0
                     for varible in self.data:
                         varible.set(0)
@@ -66,38 +65,29 @@ class Database:
         return [root.getvar(str(i)) for i in range(start, (start + 9*9), 9)]
 
     def square_nums(self, index):
-        """ returns list with values on square to compare with
-        r = row
-        c = column
-        """
-
-        lst = [[], [], [], [], [], [], [], [], []]
-        r = index // 9
-        c = index % 9
+        """ returns list with values on square to compare with when generating,
+        it finds out square and first index in that square. Looping through all the those values and adding them to list and returning that value.
+        """  
+        
         start = 0
-        end = 18
+        lst = []
+        square = (index % 9 // 3) + (index // 27 * 3)
+        if square == 1: start = 3
+        if square == 2: start = 6
+        if square == 3: start = 27
+        if square == 4: start = 30
+        if square == 5: start = 33
+        if square == 6: start = 54
+        if square == 7: start = 57
+        if square == 8: start = 60
 
-        # Makes all lists
-        # ! THREE FOR LOOPS INSIDE EACH OTHER?!
-        # TODO Search for improvement with the loops
-        for listKey in range(9):
-
-            # Subsquare index, counts:
-            # 0,9,18...1,10,19 etc.
-            for _ in range(3):
-                for value in range(start, end+1, 9):
-                    lst[listKey].append(value)
-
-                # Move start to next index
-                start += 1
-                end += 1
-
-            # When first 3 or 6 subsquares are done
-            if listKey == 2 or listKey == 5:
-                start += 18
-                end += 18
-
-        return [root.getvar(str(i)) for i in lst[((c // 3) + (r // 3 * 3))]]
+        # Subsquare index, counts:
+        # 0,9,18...1,10,19 etc.
+        for move in range(3):
+            end = start + move + 19
+            [lst.append(value) for value in range(start + move, end, 9)]
+            
+        return [root.getvar(str(num)) for num in lst]
 
 
 class RemoveNumbers:
@@ -295,7 +285,7 @@ class Multiplayer():
 class Game:
     def __init__(self, root):
         self.data = Database(root)
-        #self.removeNum = RemoveNumbers(root, self.data)
+        self.removeNum = RemoveNumbers(root, self.data)
         self.multiplayer = Multiplayer(root, self.data)
         self.board = Board(root, self.data)
         keyboard.on_press(self.keyboardPress)
