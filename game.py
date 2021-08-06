@@ -69,18 +69,11 @@ class Database:
         it finds out square and first index in that square. Looping through all the those values and adding them to list and returning that value.
         """  
         
-        start = 0
         lst = []
         square = (index % 9 // 3) + (index // 27 * 3)
-        if square == 1: start = 3
-        if square == 2: start = 6
-        if square == 3: start = 27
-        if square == 4: start = 30
-        if square == 5: start = 33
-        if square == 6: start = 54
-        if square == 7: start = 57
-        if square == 8: start = 60
-
+        start_lst = [0, 3, 6, 27, 30, 33, 54, 57, 60]
+        start = start_lst[square]
+        
         # Subsquare index, counts:
         # 0,9,18...1,10,19 etc.
         for move in range(3):
