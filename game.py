@@ -111,7 +111,7 @@ class RemoveNumbers:
 class Board:
     def __init__(self, root, data):
         # Vars
-        self.instantAnimation = True
+        self.instantAnimation = False
         self.data = data
         self.root = root
 
@@ -168,14 +168,9 @@ class Board:
                 Button(self.grid, name=str(index), font=('consolas', 18, 'bold'), relief='flat',
                        bg='white', bd=0, activebackground='white', command=partial(self.triggerEditting, index))
             )
-
-            # Update the text on the button from Database
-            self.data.buttons[index]['text'] = self.root.getvar(str(index))
-
-    def renderButtons(self):
+             
         yCord = 2
         count = 0
-
         for index, button in enumerate(self.data.buttons):
             if button != "":
 
@@ -187,15 +182,19 @@ class Board:
                 xCord = 2+(count*45)
                 button.place(x=xCord, y=yCord, width=42, height=42)
                 count += 1
+        root.update()
+        
+    def renderButtons(self):
+        for index, button in enumerate(self.data.buttons):
+            button['text'] = self.root.getvar(str(index))
 
-                # Render one by a time
-                if self.instantAnimation == False:
-                    root.update()
-                    root.after(25)
-
-                # Render instant
-                elif self.instantAnimation == True and index == 81:
-                    root.update()
+            # Render one by a time
+            if self.instantAnimation == False:
+                root.update()
+                root.after(25)
+        
+        #Instant board
+        root.update()
 
     def onResize(self, event):
         minSize = min(event.width, event.height) - 40
