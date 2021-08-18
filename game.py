@@ -304,7 +304,7 @@ class Game:
 
 # Game window properties
 root = Tk()
-root.title('Soduko Game')
+root.title('Sudoku Game')
 root.geometry('608x446')
 
 game = Game(root)
