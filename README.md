@@ -10,5 +10,5 @@ Progress have already started and is in working progess. The main branch will al
 ***
 
 Needs two external python libraries for running the code:
-*Keyboard 
-*Requests 
+* Keyboard 
+* Requests 
