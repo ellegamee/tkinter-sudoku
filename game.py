@@ -290,6 +290,7 @@ class Game:
         if event.name.isdigit() and int(event.name) in self.data.possible_numbers and self.data.editting_now != None:
             self.board.changeNumber(int(event.name))
 
+        # Allows the player to empty a square
         elif event.name == 'backspace':
             self.board.changeNumber('')
 
