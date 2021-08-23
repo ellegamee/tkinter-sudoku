@@ -1,4 +1,5 @@
-from tkinter import Tk, DoubleVar, Canvas, Button, BOTH, YES
+from tkinter import Tk, DoubleVar, Canvas, Button, BOTH, YES, Frame
+from tkinter.ttk import Separator
 from functools import partial
 import random
 import keyboard
@@ -120,70 +121,57 @@ class Board:
         root.update()
 
         # Canvas for background
-        self.bg = Canvas(
-            root, bg='gray', height=root.winfo_height(), width=root.winfo_width())
+        self.bg = Canvas(root, bg='gray', height=root.winfo_height(), width=root.winfo_width())
 
         # Canvas for grid
-        self.grid = Canvas(self.bg, bg='white', width=(
-            root.winfo_height()-40), height=(root.winfo_height()-40))
-
-        # Makes lines and everythird is 2px thick
-        self.data.lines = [self.grid.create_line(
-            0, 0, 0, 0) for _ in range(18)]
-
-        for line in [i for i in range(18) if i % 3 == 0]:
-            self.grid.itemconfig(self.data.lines[line], width=2)
+        self.grid = Canvas(self.bg, bg='black', width=(
+            root.winfo_height()-20), height=(root.winfo_height()-20),highlightthickness=0)
 
         # Good ones
         self.bg.pack(fill=BOTH, expand=YES)
         self.grid.place(x=20, y=20)
-        self.lineCordinates()
 
         # If true, numbers will render instant
+        self.small_frames()
+        self.button_frames()
         self.makeButtons()
         self.renderButtons()
-
+        
         root.resizable(True, True)
-        self.bg.bind('<Configure>', self.onResize)
+        #self.bg.bind('<Configure>', self.onResize)
 
-    def lineCordinates(self):
-        scale = 100/9-11
-        minSize = min(self.root.winfo_height()-40, self.root.winfo_width()-40)
+    def small_frames(self):
+        #Working
+        self.canvaslst = []
+        
+        root.update()
+        for index in range(9):
+            self.canvaslst.append(Frame(self.grid, highlightthickness=0, width=self.grid.winfo_height()/3, height=self.grid.winfo_height()/3, bg='black'))
 
-        for index in range(18):
-            # Horizontal lines
-            if index <= 8:
-                self.grid.coords(
-                    self.data.lines[index], 0, (minSize*(scale*index)), minSize, (minSize*(scale*index)))
-
-            # Vertical line
-            else:
-                self.grid.coords(
-                    self.data.lines[index], (minSize*(scale*(index-9))), 0,  (minSize*(scale*(index-9))), minSize)
-
+            self.canvaslst[index].grid(row=int(index/3), column=int(index%3),padx=1, pady=1, sticky='ns')
+    
+    def button_frames(self):
+        self.button_canvas_lst = []
+        
+        root.update()
+        for index in range(81):
+            square = (index % 9 // 3) + (index // 27 * 3)
+            self.button_canvas_lst.append(Canvas(self.canvaslst[square], highlightthickness=0, width=self.canvaslst[0].winfo_height()/3, height=self.canvaslst[0].winfo_height()/3, bg='white'))
+            
+            self.button_canvas_lst[index].grid(row=int(index/3), column=int(index%3),padx=1, pady=1, sticky='ns')
+                    
     def makeButtons(self):
         for index in range(81):
+            frame_index = (index % 9 // 3) + (index // 27 * 3)
+            
             # Button information
             self.data.buttons.append(
-                Button(self.grid, name=str(index), font=('consolas', 18, 'bold'), relief='flat',
-                       bg='white', bd=0, activebackground='white', command=partial(self.triggerEditting, index))
-            )
-             
-        yCord = 2
-        count = 0
-        for index, button in enumerate(self.data.buttons):
-            if button != "":
+                Button(self.button_canvas_lst[index], name=str(index), font=('consolas', 18, 'bold'), relief='flat', bg='white', bd=0, activebackground='white', command=partial(self.triggerEditting, index), width=3))
+            
+            #self.data.buttons[index].grid(row=int(index/3), column=int(index%3), sticky='ns')
 
-                # Button Cordinates
-                if index % 9 == 0 and index != 0:
-                    yCord += 45
-                    count = 0
+            self.data.buttons[index].pack(fill='both', expand=YES)
 
-                xCord = 2+(count*45)
-                button.place(x=xCord, y=yCord, width=42, height=42)
-                count += 1
-        root.update()
-        
     def renderButtons(self):
         for index, button in enumerate(self.data.buttons):
             button['text'] = self.root.getvar(str(index))
@@ -199,27 +187,6 @@ class Board:
     def onResize(self, event):
         minSize = min(event.width, event.height) - 40
         self.grid.config(width=minSize, height=minSize)
-        self.lineCordinates()
-
-        # Buttons
-        size = (minSize/9) - 3
-        yCord = 2
-        count = 0
-
-        for index, button in enumerate(self.data.buttons):
-            if index % 9 == 0 and index != 0:
-                yCord += minSize/9
-                count = 0
-
-            # Vars for button update
-            xCord = 2+(count*(minSize/9))
-            fontSize = int(minSize/9*0.4)
-
-            # Updates button place/config
-            button.place(x=xCord, y=yCord, width=size, height=size)
-            button.configure(font=('consolas', fontSize, 'bold'))
-
-            count += 1
 
     # TODO Change position, place it in game or new class
     # TODO Maybe inside game even, need index to be global
@@ -305,7 +272,8 @@ class Game:
 # Game window properties
 root = Tk()
 root.title('Soduko Game')
-root.geometry('608x446')
+root.geometry('1920x1080')
+root.state('zoomed')
 
 game = Game(root)
 root.mainloop()
