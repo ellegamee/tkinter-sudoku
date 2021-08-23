@@ -272,7 +272,6 @@ class Game:
         elif event.name == 'q':
             root.destroy()
 
-
 # Game window properties
 root = Tk()
 root.title('Sudoku Game')
