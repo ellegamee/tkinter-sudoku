@@ -251,11 +251,15 @@ class Game:
 
     # Runs when keyboard button is pressed
     def keyboardPress(self, event):
-
+        
         # If 1 to 9 is pressed
         # Sends key to changeNumber
         if event.name.isdigit() and int(event.name) in self.data.possible_numbers and self.data.editting_now != None:
             self.board.changeNumber(int(event.name))
+
+        # Allows the player to empty a square
+        elif event.name == 'backspace':
+            self.board.changeNumber('')
 
         # Clears all selected squares
         elif event.name == 'esc':
@@ -271,7 +275,7 @@ class Game:
 
 # Game window properties
 root = Tk()
-root.title('Soduko Game')
+root.title('Sudoku Game')
 root.geometry('1920x1080')
 root.state('zoomed')
 
