@@ -10,7 +10,7 @@ class Database:
     def __init__(self, root):
         self.data = [DoubleVar(root, name=str(index)) for index in range(81)]
         self.possible_numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-        self.editting_now = None
+        self.editting_now = []
         self.buttons = []
         self.lines = []
 
@@ -192,7 +192,8 @@ class Board:
     # TODO Maybe inside game even, need index to be global
     def triggerEditting(self, index):
         # When button is not pressed
-        if self.data.editting_now == None:
+        print(self.data.editting_now)
+        if self.data.editting_now == []:
             self.data.editting_now = [index]
             self.data.buttons[index].configure(bg='lightgray')
 
@@ -203,13 +204,19 @@ class Board:
             # If the button is not in edit list
             if index not in self.data.editting_now:
                 self.data.editting_now.append(index)
-
-        # Previous button still toggeld
+     
+        # Deselects old buttons when new button is clicked 
         else:
-            for editIndex in self.data.editting_now:
-                self.data.buttons[editIndex].configure(bg='white')
-                self.data.editting_now = [index]
-                self.data.buttons[index].configure(bg='lightgray')
+            
+            if index in self.data.editting_now:
+                self.data.editting_now = []
+                self.data.buttons[index].configure(bg='white')
+
+            else:    
+                for editIndex in self.data.editting_now:
+                    self.data.buttons[editIndex].configure(bg='white')
+                    self.data.editting_now = [index]
+                    self.data.buttons[index].configure(bg='lightgray')
 
     def changeNumber(self, key):
         print('keyboard:', key)
@@ -222,7 +229,7 @@ class Board:
 
             # Deselecting button after new number is placed
             self.data.buttons[editIndex].configure(bg='white')
-            self.data.editting_now = None
+            self.data.editting_now = []
 
 
 class Multiplayer():
