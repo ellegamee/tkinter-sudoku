@@ -1,7 +1,7 @@
-from tkinter import Tk, DoubleVar, Canvas, Button, BOTH, YES, Frame
-from tkinter.ttk import Separator
+from tkinter import Tk, DoubleVar, Canvas, Button, BOTH, YES, Frame, SE
 from functools import partial
 import random
+from tkinter.constants import ANCHOR, CENTER
 import keyboard
 import requests
 
@@ -17,6 +17,7 @@ class Database:
         # Start generating
         self.generate_numbers()
         self.board_answer = [root.getvar(str(index)) for index in range(81)]
+        
 
     def generate_numbers(self):
         ''' takes and generates all numbers for a game
@@ -85,9 +86,6 @@ class Database:
 
 
 class RemoveNumbers:
-    #! Value on the empty buttons is strings
-    #! And not ints as the rest of the buttons
-
     # Todo Totally random and makes NON-unique
     # Todo solutions, needs and improvement
 
@@ -119,10 +117,13 @@ class Board:
         # Must do
         root.resizable(False, False)
         root.update()
-
+        print(root.winfo_height())
+        
         # Canvas for background
         self.bg = Canvas(root, bg='gray', height=root.winfo_height(), width=root.winfo_width())
 
+        root.update()
+        print(root.winfo_height()-20)
         # Canvas for grid
         self.grid = Canvas(self.bg, bg='black', width=(
             root.winfo_height()-20), height=(root.winfo_height()-20),highlightthickness=0)
@@ -135,7 +136,7 @@ class Board:
         self.small_frames()
         self.button_frames()
         self.makeButtons()
-        self.renderButtons()
+        #self.renderButtons()
         
         root.resizable(True, True)
         #self.bg.bind('<Configure>', self.onResize)
@@ -161,16 +162,16 @@ class Board:
             self.button_canvas_lst[index].grid(row=int(index/3), column=int(index%3),padx=1, pady=1, sticky='ns')
                     
     def makeButtons(self):
+        size = self.canvaslst[0].winfo_height()/3
         for index in range(81):
-            frame_index = (index % 9 // 3) + (index // 27 * 3)
-            
+                        
             # Button information
             self.data.buttons.append(
-                Button(self.button_canvas_lst[index], name=str(index), font=('consolas', 18, 'bold'), relief='flat', bg='white', bd=0, activebackground='white', command=partial(self.triggerEditting, index), width=3))
-            
-            #self.data.buttons[index].grid(row=int(index/3), column=int(index%3), sticky='ns')
+                Button(self.button_canvas_lst[index], name=str(index), font=('consolas', 18, 'bold'), relief='flat', bg='white', bd=0, activebackground='white', command=partial(self.triggerEditting, index)))
 
-            self.data.buttons[index].pack(fill='both', expand=YES)
+            self.data.buttons[index].place(x=0, y=0, height=size, width=size)
+        root.update()
+            
 
     def renderButtons(self):
         for index, button in enumerate(self.data.buttons):
@@ -276,7 +277,10 @@ class Game:
 root = Tk()
 root.title('Sudoku Game')
 root.geometry('1920x1080')
-root.state('zoomed')
+root.state('normal')
+
+#May not works
+root.iconbitmap('')
 
 game = Game(root)
 root.mainloop()
