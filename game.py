@@ -165,7 +165,7 @@ class Board:
                         
             # Button information
             self.data.buttons.append(
-                Button(self.button_canvas_lst[index], name=str(index), font=('consolas', 18, 'bold'), relief='flat', bg='white', bd=0, activebackground='white', command=partial(self.triggerEditting, index)))
+                Button(self.button_canvas_lst[index], name=str(index), font=('consolas', 24, 'bold'), relief='flat', bg='white', bd=0, activebackground='white', command=partial(self.triggerEditting, index)))
 
             self.data.buttons[index].place(x=0, y=0, height=size, width=size)
         root.update()
@@ -282,10 +282,10 @@ class Game:
 root = Tk()
 root.title('Sudoku Game')
 root.geometry('1920x1080')
-root.state('normal')
+root.state('zoomed')
 
 #May not works
-root.iconbitmap('')
+root.iconbitmap('Sudoku_icon_2.ico')
 
 game = Game(root)
 root.mainloop()
