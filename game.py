@@ -117,16 +117,14 @@ class Board:
         # Must do
         root.resizable(False, False)
         root.update()
-        print(root.winfo_height())
         
         # Canvas for background
         self.bg = Canvas(root, bg='gray', height=root.winfo_height(), width=root.winfo_width())
 
         root.update()
-        print(root.winfo_height()-20)
         # Canvas for grid
         self.grid = Canvas(self.bg, bg='black', width=(
-            root.winfo_height()-20), height=(root.winfo_height()-20),highlightthickness=0)
+            root.winfo_height()-400), height=(root.winfo_height()-400),highlightthickness=0)
 
         # Good ones
         self.bg.pack(fill=BOTH, expand=YES)
@@ -136,7 +134,7 @@ class Board:
         self.small_frames()
         self.button_frames()
         self.makeButtons()
-        #self.renderButtons()
+        self.renderButtons()
         
         root.resizable(True, True)
         #self.bg.bind('<Configure>', self.onResize)
