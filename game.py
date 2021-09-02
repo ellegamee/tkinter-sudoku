@@ -281,8 +281,11 @@ class Game:
 # Game window properties
 root = Tk()
 root.title('Sudoku Game')
-root.geometry('1920x1080')
-root.state('normal')
+
+# Geometry window
+window_width = root.winfo_screenwidth()
+window_height = root.winfo_screenheight()
+root.geometry(f'{window_width}x{window_height}+0+0')
 
 #May not works
 root.iconbitmap('')
