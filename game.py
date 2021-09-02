@@ -165,7 +165,7 @@ class Board:
                         
             # Button information
             self.data.buttons.append(
-                Button(self.button_canvas_lst[index], name=str(index), font=('consolas', 18, 'bold'), relief='flat', bg='white', bd=0, activebackground='white', command=partial(self.triggerEditting, index)))
+                Button(self.button_canvas_lst[index], name=str(index), font=('consolas', 24, 'bold'), relief='flat', bg='white', bd=0, activebackground='white', command=partial(self.triggerEditting, index)))
 
             self.data.buttons[index].place(x=0, y=0, height=size, width=size)
         root.update()
@@ -288,7 +288,7 @@ window_height = root.winfo_screenheight()
 root.geometry(f'{window_width}x{window_height}+0+0')
 
 #May not works
-root.iconbitmap('')
+root.iconbitmap('Sudoku_icon_2.ico')
 
 game = Game(root)
 root.mainloop()
