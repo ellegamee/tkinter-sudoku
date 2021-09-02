@@ -1,9 +1,10 @@
-from tkinter import Tk, DoubleVar, Canvas, Button, BOTH, YES, Frame, SE
+from tkinter import PhotoImage, Tk, DoubleVar, Canvas, Button, BOTH, YES, Frame, SE
 from functools import partial
 import random
 from tkinter.constants import ANCHOR, CENTER
 import keyboard
 import requests
+import os
 
 
 class Database:
@@ -287,8 +288,8 @@ window_width = root.winfo_screenwidth()
 window_height = root.winfo_screenheight()
 root.geometry(f'{window_width}x{window_height}+0+0')
 
-#May not works
-root.iconbitmap('Sudoku_icon_2.ico')
+# Icon in window
+root.iconphoto(True,  PhotoImage('Icons/icon.png'))
 
 game = Game(root)
 root.mainloop()
