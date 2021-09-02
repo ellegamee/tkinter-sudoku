@@ -1,7 +1,6 @@
 from tkinter import PhotoImage, Tk, DoubleVar, Canvas, Button, BOTH, YES, Frame
 from functools import partial
 import random
-from tkinter.constants import ANCHOR, CENTER
 import keyboard
 import requests
 
