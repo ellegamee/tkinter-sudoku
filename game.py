@@ -215,7 +215,6 @@ class Board:
             
     def triggerEditting(self, index):
         # When button is not pressed
-        print(self.data.editting_now)
         if self.data.editting_now == []:
             self.data.editting_now = [index]
             self.data.buttons[index].configure(bg='lightgray')
@@ -240,11 +239,8 @@ class Board:
                     self.data.buttons[editIndex].configure(bg='white')
                     self.data.editting_now = [index]
                     self.data.buttons[index].configure(bg='lightgray')
-
+        
     def changeNumber(self, key):
-        print('keyboard:', key)
-        print(f'index button: {self.data.editting_now}\n')
-
         for editIndex in self.data.editting_now:
             # Changing the number in Database and on button
             self.data.data[editIndex].set(key)
@@ -253,7 +249,7 @@ class Board:
             # Deselecting button after new number is placed
             self.data.buttons[editIndex].configure(bg='white')
             self.data.editting_now = []
-
+            
 
 class Multiplayer():
     def __init__(self, root, data):
@@ -278,10 +274,10 @@ class Game:
         #self.multiplayer = Multiplayer(root, self.data)
         self.board = Board(root, self.data)
         keyboard.on_press(self.keyboardPress)
+        print(self.data.board_answer)
 
     # Runs when keyboard button is pressed
     def keyboardPress(self, event):
-        
         # If 1 to 9 is pressed
         # Sends key to changeNumber
         if event.name.isdigit() and int(event.name) in self.data.possible_numbers and self.data.editting_now != None:
@@ -301,7 +297,14 @@ class Game:
         # Quits program
         elif event.name == 'q':
             root.destroy()
-
+        
+        self.win_scenario()
+    
+    def win_scenario(self):
+        lst = [root.getvar(str(num)) for num in self.data.data]
+        if self.data.board_answer == lst:
+            print('you win!')
+        
 # Game window properties
 root = Tk()
 root.title('Sudoku Game')
