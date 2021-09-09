@@ -3,6 +3,7 @@ from functools import partial
 import random
 import keyboard
 import requests
+import platform
 
 class Database:
     def __init__(self, root):
@@ -311,7 +312,11 @@ window_height = root.winfo_screenheight()
 root.geometry(f'{window_width}x{window_height}+0+0')
 
 # Icon in window
-root.iconphoto(True,  PhotoImage('Icons/icon.png'))
-
+if  platform.system() == 'Linux':
+    root.iconphoto(True,  PhotoImage('Icons/icon.png'))
+    
+else:
+    root.iconbitmap('Icons/icon.ico')
+    
 game = Game(root)
 root.mainloop()
