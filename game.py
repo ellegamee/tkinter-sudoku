@@ -98,13 +98,26 @@ class RemoveNumbers:
             # Check if button is already empty
             if root.getvar(str(index)) == None:
                 continue
-
-            # Changes the value to empty
+            
+            previos_value = root.getvar(str(index))
             root.setvar(str(index), value="")
-            self.removed += 1
-            continue
-
-
+            
+            numbers = self.data.row_nums(index) + self.data.column_nums(
+                index) + self.data.square_nums(index)
+            
+            solutions = 0
+            for num in self.data.possible_numbers:
+                if num not in numbers:
+                    solutions += 1
+            
+            if solutions > 1:
+                root.setvar(str(index), value=previos_value)
+                continue
+            
+            else:
+                self.removed += 1
+                continue
+            
 class Board:
     def __init__(self, root, data):
         # Vars
@@ -134,8 +147,8 @@ class Board:
         self.makeButtons()
         self.renderButtons()
         
-        root.resizable(True, True)
-        #self.bg.bind('<Configure>', self.onResize)
+        #root.resizable(True, True)
+        self.bg.bind('<Configure>', self.onResize)
 
     def small_frames(self):
         #Working
@@ -168,7 +181,6 @@ class Board:
             self.data.buttons[index].place(x=0, y=0, height=size, width=size)
         root.update()
             
-
     def renderButtons(self):
         for index, button in enumerate(self.data.buttons):
             button['text'] = self.root.getvar(str(index))
@@ -182,11 +194,24 @@ class Board:
         root.update()
 
     def onResize(self, event):
+        """
         minSize = min(event.width, event.height) - 40
-        self.grid.config(width=minSize, height=minSize)
-
-    # TODO Change position, place it in game or new class
-    # TODO Maybe inside game even, need index to be global
+        size = (minSize-400) / 9
+        self.grid.configure(width=(minSize-(root.winfo_height()/2)), height=(minSize-(root.winfo_height()/2)))
+        
+        for index, canvas in enumerate(self.button_canvas_lst):
+            pass
+            #canvas.configure(height=size, width=size)
+            #self.data.buttons[index].configure(height=size, width=size)
+        """
+        
+        size = self.canvaslst[0].winfo_height()/3
+        for button in self.data.buttons:
+            button.destroy()
+            print(self.data.buttons)
+            button.place(x=0, y=0, height=size, width=size)
+        root.update()
+            
     def triggerEditting(self, index):
         # When button is not pressed
         print(self.data.editting_now)
@@ -249,7 +274,7 @@ class Game:
     def __init__(self, root):
         self.data = Database(root)
         self.removeNum = RemoveNumbers(root, self.data)
-        self.multiplayer = Multiplayer(root, self.data)
+        #self.multiplayer = Multiplayer(root, self.data)
         self.board = Board(root, self.data)
         keyboard.on_press(self.keyboardPress)
 
