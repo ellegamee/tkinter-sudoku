@@ -84,20 +84,18 @@ class Database:
 
 
 class RemoveNumbers:
-    # Todo Totally random and makes NON-unique
-    # Todo solutions, needs and improvement
-
     def __init__(self, root, data):
         self.data = data
         self.root = root
         self.removed = 0
-
+        self.empty = 0
+        
         while self.removed <= (81 - 34):
             index = random.randrange(81)
-
+    
             # Check if button is already empty
-            if root.getvar(str(index)) == None:
-                continue
+            if root.getvar(str(index)) == "":
+                self.empty += 1
             
             previos_value = root.getvar(str(index))
             root.setvar(str(index), value="")
@@ -117,6 +115,8 @@ class RemoveNumbers:
             else:
                 self.removed += 1
                 continue
+        
+        #print(self.empty)
             
 class Board:
     def __init__(self, root, data):
