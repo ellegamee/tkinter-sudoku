@@ -1,4 +1,4 @@
-from tkinter import PhotoImage, Tk, DoubleVar, Canvas, Button, BOTH, YES, Frame
+from tkinter import PhotoImage, Tk, DoubleVar, Canvas, Button, BOTH, YES, Frame, Label
 from functools import partial
 import random
 import keyboard
@@ -122,7 +122,7 @@ class RemoveNumbers:
 class Board:
     def __init__(self, root, data):
         # Vars
-        self.instantAnimation = False
+        self.instantAnimation = True
         self.data = data
         self.root = root
 
@@ -249,6 +249,19 @@ class Board:
             # Deselecting button after new number is placed
             self.data.buttons[editIndex].configure(bg='white')
             self.data.editting_now = []
+    
+    def win_dialog(self):
+        win_frame = Frame(self.bg)
+        text = Label(win_frame, text="Du vann!\nVill du spela igen?", font=("Arial", 45))
+        text.grid(row=0, column=0, columnspan=2)
+        
+        b_menu = Button(win_frame, text="Huvud meny", font=("Arial", 20))
+        b_retry = Button(win_frame, text="Försök igen", font=("Arial", 20))
+        b_menu.grid(row=1, column=1)
+        b_retry.grid(row=1, column=0)
+        
+        win_frame.configure(borderwidth=2, relief="solid")
+        win_frame.place(x=500, y=500)
             
 
 class Multiplayer():
@@ -274,7 +287,7 @@ class Game:
         #self.multiplayer = Multiplayer(root, self.data)
         self.board = Board(root, self.data)
         keyboard.on_press(self.keyboardPress)
-        print(self.data.board_answer)
+        self.win_scenario(True)
 
     # Runs when keyboard button is pressed
     def keyboardPress(self, event):
@@ -298,12 +311,16 @@ class Game:
         elif event.name == 'q':
             root.destroy()
         
-        self.win_scenario()
+        self.win_scenario(False)
     
-    def win_scenario(self):
+    def win_scenario(self, override):
         lst = [root.getvar(str(num)) for num in self.data.data]
         if self.data.board_answer == lst:
             print('you win!')
+            self.board.win_dialog()
+            
+        if override == True:
+            self.board.win_dialog()
         
 # Game window properties
 root = Tk()
