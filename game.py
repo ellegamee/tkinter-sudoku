@@ -1,6 +1,7 @@
 from tkinter import PhotoImage, Tk, DoubleVar, Canvas, Button, BOTH, YES, Frame, Label
 from functools import partial
 import random
+from tkinter.constants import CENTER
 import keyboard
 import requests
 import platform
@@ -261,7 +262,7 @@ class Board:
         b_retry.grid(row=1, column=0)
         
         win_frame.configure(borderwidth=2, relief="solid")
-        win_frame.place(x=500, y=500)
+        win_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
             
 
 class Multiplayer():
