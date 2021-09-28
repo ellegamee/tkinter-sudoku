@@ -257,12 +257,15 @@ class Board:
         text.grid(row=0, column=0, columnspan=2)
         
         b_menu = Button(win_frame, text="Huvud meny", font=("Arial", 20))
-        b_retry = Button(win_frame, text="Försök igen", font=("Arial", 20))
+        b_retry = Button(win_frame, text="Försök igen", font=("Arial", 20), command=self.retry)
         b_menu.grid(row=1, column=1)
         b_retry.grid(row=1, column=0)
         
         win_frame.configure(borderwidth=2, relief="solid")
         win_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
+    
+    def retry(self):
+        print('retry')
             
 
 class Multiplayer():
@@ -288,7 +291,7 @@ class Game:
         #self.multiplayer = Multiplayer(root, self.data)
         self.board = Board(root, self.data)
         keyboard.on_press(self.keyboardPress)
-        self.win_scenario(False)
+        self.win_scenario(True)
 
     # Runs when keyboard button is pressed
     def keyboardPress(self, event):
