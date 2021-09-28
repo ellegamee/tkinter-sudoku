@@ -12,12 +12,17 @@ class Database:
         self.possible_numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
         self.editting_now = []
         self.buttons = []
-        self.lines = []
-
-        # Start generating
+        
+        self.make_database()
+    
+    def make_database(self):
         self.generate_numbers()
         self.board_answer = [root.getvar(str(index)) for index in range(81)]
         
+    def reset_database(self):
+        for item in self.data:
+            item.set('')
+            
 
     def generate_numbers(self):
         ''' takes and generates all numbers for a game
@@ -83,30 +88,26 @@ class Database:
             [lst.append(value) for value in range(start + move, end, 9)]
             
         return [root.getvar(str(num)) for num in lst]
-
-
-class RemoveNumbers:
-    def __init__(self, root, data):
-        self.data = data
-        self.root = root
-        self.removed = 0
-        self.empty = 0
+    
+    def remove_numbers(self):
+        removed = 0
+        empty = 0
         
-        while self.removed <= (81 - 34):
+        while removed <= (81 - 34):
             index = random.randrange(81)
     
             # Check if button is already empty
             if root.getvar(str(index)) == "":
-                self.empty += 1
+                empty += 1
             
             previos_value = root.getvar(str(index))
             root.setvar(str(index), value="")
             
-            numbers = self.data.row_nums(index) + self.data.column_nums(
-                index) + self.data.square_nums(index)
+            numbers = self.row_nums(index) + self.column_nums(
+                index) + self.square_nums(index)
             
             solutions = 0
-            for num in self.data.possible_numbers:
+            for num in self.possible_numbers:
                 if num not in numbers:
                     solutions += 1
             
@@ -115,11 +116,9 @@ class RemoveNumbers:
                 continue
             
             else:
-                self.removed += 1
+                removed += 1
                 continue
-        
-        #print(self.empty)
-            
+                    
 class Board:
     def __init__(self, root, data):
         # Vars
@@ -252,21 +251,25 @@ class Board:
             self.data.editting_now = []
     
     def win_dialog(self):
-        win_frame = Frame(self.bg)
-        text = Label(win_frame, text="Du vann!\nVill du spela igen?", font=("Arial", 45))
+        self.win_frame = Frame(self.bg)
+        text = Label(self.win_frame, text="Du vann!\nVill du spela igen?", font=("Arial", 45))
         text.grid(row=0, column=0, columnspan=2)
         
-        b_menu = Button(win_frame, text="Huvud meny", font=("Arial", 20))
-        b_retry = Button(win_frame, text="Försök igen", font=("Arial", 20), command=self.retry)
+        b_menu = Button(self.win_frame, text="Huvud meny", font=("Arial", 20))
+        b_retry = Button(self.win_frame, text="Försök igen", font=("Arial", 20), command=self.retry)
         b_menu.grid(row=1, column=1)
         b_retry.grid(row=1, column=0)
         
-        win_frame.configure(borderwidth=2, relief="solid")
-        win_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
+        self.win_frame.configure(borderwidth=2, relief="solid")
+        self.win_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
     
     def retry(self):
-        print('retry')
-            
+        self.data.reset_database()
+        self.data.make_database()
+        
+        self.data.remove_numbers()
+        self.win_frame.destroy()
+        self.renderButtons()
 
 class Multiplayer():
     def __init__(self, root, data):
@@ -287,11 +290,11 @@ class Multiplayer():
 class Game:
     def __init__(self, root):
         self.data = Database(root)
-        self.removeNum = RemoveNumbers(root, self.data)
+        self.data.remove_numbers()
         #self.multiplayer = Multiplayer(root, self.data)
         self.board = Board(root, self.data)
         keyboard.on_press(self.keyboardPress)
-        self.win_scenario(True)
+        self.win_scenario(False)
 
     # Runs when keyboard button is pressed
     def keyboardPress(self, event):
