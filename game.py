@@ -5,6 +5,7 @@ from tkinter.constants import CENTER
 import keyboard
 import requests
 import platform
+import numbers
 
 class Database:
     def __init__(self, root):
@@ -147,6 +148,7 @@ class Board:
         self.button_frames()
         self.makeButtons()
         self.renderButtons()
+        self.orginial_numbers()
         
         #root.resizable(True, True)
         self.bg.bind('<Configure>', self.onResize)
@@ -249,6 +251,13 @@ class Board:
             # Deselecting button after new number is placed
             self.data.buttons[editIndex].configure(bg='white')
             self.data.editting_now = []
+    
+    def orginial_numbers(self):
+        for index, item in enumerate(self.data.data):
+            print(root.getvar(name=f'{index}'))
+            if type(root.getvar(name=f'{index}')) == int:
+                print('change color')
+                self.data.buttons[index].configure(fg='blue')
     
     def win_dialog(self):
         self.win_frame = Frame(self.bg)
