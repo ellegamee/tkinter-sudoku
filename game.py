@@ -252,11 +252,11 @@ class Board:
             self.data.buttons[editIndex].configure(bg='white')
             self.data.editting_now = []
     
-    def orginial_numbers(self):
-        for index, item in enumerate(self.data.data):
-            print(root.getvar(name=f'{index}'))
+    def  orginial_numbers(self):
+        for index in range(81):
+            self.data.buttons[index].configure(fg='black')
+            
             if type(root.getvar(name=f'{index}')) == int:
-                print('change color')
                 self.data.buttons[index].configure(fg='blue')
     
     def win_dialog(self):
@@ -278,6 +278,7 @@ class Board:
         
         self.data.remove_numbers()
         self.win_frame.destroy()
+        self.orginial_numbers()
         self.renderButtons()
 
 class Multiplayer():
