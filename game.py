@@ -303,7 +303,6 @@ class Game:
         #self.multiplayer = Multiplayer(root, self.data)
         self.board = Board(root, self.data)
         keyboard.on_press(self.keyboardPress)
-        self.win_scenario(False)
 
     # Runs when keyboard button is pressed
     def keyboardPress(self, event):
@@ -323,9 +322,10 @@ class Game:
 
             self.data.editting_now = None
 
-        # Quits program
         elif event.name == 'q':
             root.destroy()
+        
+        self.win_scenario(False)
             
     def win_scenario(self, override):
         lst = [root.getvar(str(num)) for num in self.data.data]
