@@ -1,7 +1,7 @@
-from tkinter import PhotoImage, Tk, DoubleVar, Canvas, Button, BOTH, YES, Frame, Label
+from tkinter import PhotoImage, Tk, DoubleVar, Canvas, Button, BOTH, YES, Frame, Label, ttk
 from functools import partial
 import random
-from tkinter.constants import CENTER
+from tkinter.constants import CENTER, COMMAND, S
 import keyboard
 import requests
 import platform
@@ -13,9 +13,7 @@ class Database:
         self.possible_numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
         self.editting_now = []
         self.buttons = []
-        
-        self.make_database()
-    
+            
     def make_database(self):
         self.generate_numbers()
         self.board_answer = [root.getvar(str(index)) for index in range(81)]
@@ -122,10 +120,13 @@ class Database:
                     
 class Board:
     def __init__(self, root, data):
-        # Vars
-        self.instantAnimation = True
         self.data = data
         self.root = root
+        self.main_menu()
+
+    def createBoard(self):
+          # Vars
+        self.instantAnimation = True
 
         # Must do
         root.resizable(False, False)
@@ -261,16 +262,23 @@ class Board:
     
     def win_dialog(self):
         self.win_frame = Frame(self.bg)
-        text = Label(self.win_frame, text="Du vann!\nVill du spela igen?", font=("Arial", 45))
-        text.grid(row=0, column=0, columnspan=2)
+        text = Label(self.win_frame, text="Congrats you won!\nPlay again?", font=("Franklin Gothic Medium", 33))
+        text.place(relx=0.5, rely=0.3, anchor=CENTER, relheight=0.45, relwidth=0.8)
         
-        b_menu = Button(self.win_frame, text="Huvud meny", font=("Arial", 20))
-        b_retry = Button(self.win_frame, text="Försök igen", font=("Arial", 20), command=self.retry)
-        b_menu.grid(row=1, column=1)
-        b_retry.grid(row=1, column=0)
+        b_menu = ttk.Button(self.win_frame, text="Main menu", command=self.removeBoard, style='win_b.TButton', takefocus=False)
+        b_retry = ttk.Button(self.win_frame, text="Retry", command=self.retry, style='win_b.TButton', takefocus=False)
+        self.style.configure('win_b.TButton', font=("Franklin Gothic Medium", 20))
+        b_menu.place(relx=0.75, rely=0.75, relheight=0.3, relwidth=0.4, anchor=CENTER)
+        b_retry.place(relx=0.25, rely=0.75, relheight=0.3, relwidth=0.4, anchor=CENTER)
+
         
         self.win_frame.configure(borderwidth=2, relief="solid")
-        self.win_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
+        self.win_frame.place(relx=0.5, rely=0.5, relwidth=0.4, relheight=0.3, anchor=CENTER)
+
+    def removeBoard(self):
+        for child in self.bg.winfo_children():
+            child.destroy()
+        self.bg.destroy()
     
     def retry(self):
         self.data.reset_database()
@@ -280,6 +288,42 @@ class Board:
         self.win_frame.destroy()
         self.orginial_numbers()
         self.renderButtons()
+    
+    def pressPlay(self):
+        self.data.buttons = []
+        self.data.reset_database()
+        self.data.make_database()
+        self.data.remove_numbers()
+        self.createBoard()
+        
+    
+    def pressExit(self,root):
+        root.destroy()
+    
+    def main_menu(self):
+        self.style = ttk.Style()
+        self.style.theme_use('clam')
+        
+        self.t_heading = Label(self.root, text='SUDOKU')
+        self.t_heading.place(relx=0.5, rely=0.2, anchor=CENTER)
+
+        self.b_play = ttk.Button(self.root, text="Play", takefocus=False, command=(self.pressPlay))
+        self.b_play.place(relx=0.5, rely=0.45, relwidth=0.2, relheight=0.11, anchor=CENTER)
+
+        self.b_test = ttk.Button(self.root, text='Test', takefocus=False)
+        self.b_test.place(relx=0.5, rely=0.60, relwidth=0.2, relheight=0.11, anchor=CENTER)
+
+        self.b_exit = ttk.Button(self.root, text='Exit', takefocus=False, command=partial(self.pressExit,root))
+        self.b_exit.place(relx=0.5, rely=0.75, relwidth=0.2, relheight=0.11, anchor=CENTER)
+
+
+        self.style.configure('TButton', font=('Franklin Gothic Medium', 40), justify='center')
+        self.t_heading.configure(font=('Impact', 100))
+    
+        
+        
+
+        
 
 class Multiplayer():
     def __init__(self, root, data):
@@ -299,11 +343,10 @@ class Multiplayer():
 
 class Game:
     def __init__(self, root):
-        self.data = Database(root)
-        self.data.remove_numbers()
-        #self.multiplayer = Multiplayer(root, self.data)
-        self.board = Board(root, self.data)
         keyboard.on_press(self.keyboardPress)
+        self.root = root
+        self.data = Database(root)
+        self.board = Board(root, self.data)
 
     # Runs when keyboard button is pressed
     def keyboardPress(self, event):
