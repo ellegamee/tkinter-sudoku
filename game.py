@@ -1,11 +1,9 @@
-from tkinter import PhotoImage, Tk, DoubleVar, Canvas, Button, BOTH, YES, Frame, Label, ttk
+from tkinter import PhotoImage, Tk, DoubleVar, Canvas, Button, BOTH, YES, Frame, Label, ttk, CENTER
 from functools import partial
 import random
-from tkinter.constants import CENTER, COMMAND, S
 import keyboard
 import requests
 import platform
-import numbers
 
 class Database:
     def __init__(self, root):
@@ -21,7 +19,6 @@ class Database:
     def reset_database(self):
         for item in self.data:
             item.set('')
-            
 
     def generate_numbers(self):
         ''' takes and generates all numbers for a game
@@ -129,7 +126,7 @@ class Board:
         self.instantAnimation = True
 
         # Must do
-        root.resizable(False, False)
+        #root.resizable(False, False)
         root.update()
         
         # Canvas for background
@@ -152,7 +149,6 @@ class Board:
         self.orginial_numbers()
         
         #root.resizable(True, True)
-        self.bg.bind('<Configure>', self.onResize)
 
     def small_frames(self):
         #Working
@@ -195,25 +191,6 @@ class Board:
                 root.after(25)
         
         #Instant board
-        root.update()
-
-    def onResize(self, event):
-        """
-        minSize = min(event.width, event.height) - 40
-        size = (minSize-400) / 9
-        self.grid.configure(width=(minSize-(root.winfo_height()/2)), height=(minSize-(root.winfo_height()/2)))
-        
-        for index, canvas in enumerate(self.button_canvas_lst):
-            pass
-            #canvas.configure(height=size, width=size)
-            #self.data.buttons[index].configure(height=size, width=size)
-        """
-        
-        size = self.canvaslst[0].winfo_height()/3
-        for button in self.data.buttons:
-            button.destroy()
-            print(self.data.buttons)
-            button.place(x=0, y=0, height=size, width=size)
         root.update()
             
     def triggerEditting(self, index):
@@ -316,15 +293,10 @@ class Board:
         self.b_exit = ttk.Button(self.root, text='Exit', takefocus=False, command=partial(self.pressExit,root))
         self.b_exit.place(relx=0.5, rely=0.75, relwidth=0.2, relheight=0.11, anchor=CENTER)
 
-
         self.style.configure('TButton', font=('Franklin Gothic Medium', 40), justify='center')
         self.t_heading.configure(font=('Impact', 100))
     
-        
-        
-
-        
-
+    
 class Multiplayer():
     def __init__(self, root, data):
         self.data = data
@@ -388,6 +360,7 @@ root.title('Sudoku Game')
 window_width = root.winfo_screenwidth()
 window_height = root.winfo_screenheight()
 root.geometry(f'{window_width}x{window_height}+0+0')
+game = Game(root)
 
 # Icon in window
 if  platform.system() == 'Linux':
@@ -396,5 +369,4 @@ if  platform.system() == 'Linux':
 else:
     root.iconbitmap('Icons/icon.ico')
     
-game = Game(root)
 root.mainloop()
