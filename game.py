@@ -1,4 +1,4 @@
-from tkinter import PhotoImage, Tk, DoubleVar, Canvas, Button, BOTH, YES, Frame, Label, ttk, CENTER
+from tkinter import PhotoImage, Tk, DoubleVar, Canvas, Button, BOTH, YES, Frame, Label, font, ttk, CENTER
 from functools import partial
 import random
 import keyboard
@@ -365,6 +365,7 @@ game = Game(root)
 # Icon in window
 if  platform.system() == 'Linux':
     root.iconphoto(True,  PhotoImage('Icons/icon.png'))
+    game.board.main_menu.t_heading.configure(font='Arial Black')
     
 else:
     root.iconbitmap('Icons/icon.ico')
