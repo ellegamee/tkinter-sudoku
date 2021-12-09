@@ -1,6 +1,7 @@
 from tkinter import PhotoImage, Tk, DoubleVar, Canvas, Button, BOTH, YES, Frame, Label, font, ttk, CENTER
 from functools import partial
 import random
+from tkinter.constants import DISABLED
 import keyboard
 import requests
 import platform
@@ -11,6 +12,7 @@ class Database:
         self.possible_numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
         self.editting_now = []
         self.buttons = []
+        self.board_answer = []
             
     def make_database(self):
         self.generate_numbers()
@@ -124,10 +126,6 @@ class Board:
     def createBoard(self):
           # Vars
         self.instantAnimation = True
-
-        # Must do
-        #root.resizable(False, False)
-        root.update()
         
         # Canvas for background
         self.bg = Canvas(root, bg='gray', height=root.winfo_height(), width=root.winfo_width())
@@ -183,7 +181,12 @@ class Board:
             
     def renderButtons(self):
         for index, button in enumerate(self.data.buttons):
-            button['text'] = self.root.getvar(str(index))
+            button["state"] = "normal"
+            
+            string = self.root.getvar(f"{index}")
+            button['text'] = string
+            if string != "":
+                button["state"] = "disable"
 
             # Render one by a time
             if self.instantAnimation == False:
@@ -260,14 +263,13 @@ class Board:
     def retry(self):
         self.data.reset_database()
         self.data.make_database()
-        
         self.data.remove_numbers()
+
         self.win_frame.destroy()
         self.orginial_numbers()
         self.renderButtons()
     
     def pressPlay(self):
-        self.data.buttons = []
         self.data.reset_database()
         self.data.make_database()
         self.data.remove_numbers()
@@ -295,7 +297,9 @@ class Board:
 
         self.style.configure('TButton', font=('Franklin Gothic Medium', 40), justify='center')
         self.t_heading.configure(font=('Impact', 100))
-    
+        
+    def linux_heading(self):
+        self.t_heading.configure(font=('Noto Sans', 100))
     
 class Multiplayer():
     def __init__(self, root, data):
@@ -326,6 +330,7 @@ class Game:
         # Sends key to changeNumber
         if event.name.isdigit() and int(event.name) in self.data.possible_numbers and self.data.editting_now != None:
             self.board.changeNumber(int(event.name))
+            self.win_scenario(False)
 
         # Allows the player to empty a square
         elif event.name == 'backspace':
@@ -337,11 +342,6 @@ class Game:
                 self.data.buttons[editIndex].configure(bg='white')
 
             self.data.editting_now = None
-
-        elif event.name == 'q':
-            root.destroy()
-        
-        self.win_scenario(False)
             
     def win_scenario(self, override):
         lst = [root.getvar(str(num)) for num in self.data.data]
@@ -365,7 +365,7 @@ game = Game(root)
 # Icon in window
 if  platform.system() == 'Linux':
     root.iconphoto(True,  PhotoImage('Icons/icon.png'))
-    game.board.main_menu.t_heading.configure(font='Arial Black')
+    game.board.linux_heading()
     
 else:
     root.iconbitmap('Icons/icon.ico')
