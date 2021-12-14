@@ -1,9 +1,9 @@
-from tkinter import PhotoImage, Tk, DoubleVar, Canvas, Button, BOTH, YES, Frame, Label, font, ttk, CENTER
+from tkinter import PhotoImage, Tk, DoubleVar, Canvas, Button, BOTH, YES, Frame, Label, ttk, CENTER
 from functools import partial
-import random
 from tkinter.constants import DISABLED
-import keyboard
-import requests
+import random
+import keyboard # Downloaded local
+import requests # Downloaded local
 import platform
 
 class Database:
