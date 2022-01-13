@@ -13,6 +13,7 @@ class Database:
         self.editting_now = []
         self.buttons = []
         self.board_answer = []
+        self.correction = False
             
     def make_database(self):
         self.generate_numbers()
@@ -229,9 +230,19 @@ class Board:
             self.data.data[editIndex].set(key)
             self.data.buttons[editIndex]['text'] = key
 
-            # Deselecting button after new number is placed
-            self.data.buttons[editIndex].configure(bg='white')
-            self.data.editting_now = []
+            if self.data.correction == True:
+                 # Checking if the nuber is right or wrong
+                if self.data.buttons[editIndex]['text'] != self.data.board_answer[editIndex] and key != '':
+                    self.data.buttons[editIndex].configure(bg='red')
+
+                # Deselecting button after new number is placed
+                else:
+                    self.data.buttons[editIndex].configure(bg='white')
+            
+            else:
+                self.data.buttons[editIndex].configure(bg='white')
+
+        self.data.editting_now = []
     
     def  orginial_numbers(self):
         for index in range(81):
@@ -268,16 +279,19 @@ class Board:
         self.win_frame.destroy()
         self.orginial_numbers()
         self.renderButtons()
+        self.askSettings()
     
     def pressPlay(self):
         self.data.reset_database()
         self.data.make_database()
         self.data.remove_numbers()
         self.createBoard()
+        self.askSettings()
         
     
     def pressExit(self,root):
         root.destroy()
+
     
     def main_menu(self):
         self.style = ttk.Style()
@@ -300,6 +314,28 @@ class Board:
         
     def linux_heading(self):
         self.t_heading.configure(font=('Noto Sans', 100))
+    
+    def askSettings(self):
+        self.popup = Tk()
+        self.popup.geometry('400x150')
+        self.popup.eval('tk::PlaceWindow . center')
+        self.l_popup = Label(self.popup, text="Do you want the game to tell you when you've done somwthing wrong?")
+        self.l_popup.place(relx=0.5, rely=0.3, anchor=CENTER)
+        self.b_yes = ttk.Button(self.popup, text='Yes', command=self.pressYes)
+        self.b_no = ttk.Button(self.popup, text='No', command=self.pressNo)
+        self.b_yes.place(relx=0.35, rely=0.6, anchor=CENTER)
+        self.b_no.place(relx=0.65, rely=0.6, anchor=CENTER)
+
+        self.popup.mainloop()
+
+    def pressYes(self):
+        self.data.correction = True
+        self.popup.destroy()
+    
+    def pressNo(self):
+        self.data.correction = False
+        self.popup.destroy()
+
     
 class Multiplayer():
     def __init__(self, root, data):
