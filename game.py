@@ -336,23 +336,6 @@ class Board:
         self.data.correction = False
         self.popup.destroy()
 
-    
-class Multiplayer():
-    def __init__(self, root, data):
-        self.data = data
-        self.root = root
-        self.pushToCloudflare()
-
-    def pushToCloudflare(self):
-        gameBoard = requests.put('https://sodukokv.axonov.workers.dev/test',
-                                 json=[root.getvar(str(index)) for index in range(81)])
-        print(f'cloudflare: {gameBoard}')
-
-    def getFromCloudflare(self):
-        gameBoard = requests.get('https://sodukokv.axonov.workers.dev/test')
-        print(gameBoard)
-
-
 class Game:
     def __init__(self, root):
         keyboard.on_press(self.keyboardPress)
