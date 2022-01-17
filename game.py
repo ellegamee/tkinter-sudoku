@@ -319,7 +319,7 @@ class Board:
         self.popup = Tk()
         self.popup.geometry('400x150')
         self.popup.eval('tk::PlaceWindow . center')
-        self.l_popup = Label(self.popup, text="Do you want the game to tell you when you've done somwthing wrong?")
+        self.l_popup = Label(self.popup, text="Do you want the game to tell you when you've done something wrong?")
         self.l_popup.place(relx=0.5, rely=0.3, anchor=CENTER)
         self.b_yes = ttk.Button(self.popup, text='Yes', command=self.pressYes)
         self.b_no = ttk.Button(self.popup, text='No', command=self.pressNo)
