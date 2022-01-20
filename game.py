@@ -2,8 +2,6 @@ from tkinter import PhotoImage, Tk, DoubleVar, Canvas, Button, BOTH, YES, Frame,
 from functools import partial
 from tkinter.constants import DISABLED
 import random
-import keyboard # Downloaded local
-import requests # Downloaded local
 import platform
 
 class Database:
