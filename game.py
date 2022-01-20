@@ -1,8 +1,9 @@
-from tkinter import PhotoImage, Tk, DoubleVar, Canvas, Button, BOTH, YES, Frame, Label, ttk, CENTER
+from tkinter import PhotoImage, Tk, DoubleVar, Canvas, Button, BOTH, YES, Frame, Label, Toplevel, ttk, CENTER
 from functools import partial
 from tkinter.constants import DISABLED
 import random
 import platform
+import keyboard
 
 class Database:
     def __init__(self, root):
@@ -314,15 +315,19 @@ class Board:
         self.t_heading.configure(font=('Noto Sans', 100))
     
     def askSettings(self):
-        self.popup = Tk()
-        self.popup.geometry('400x150')
-        self.popup.eval('tk::PlaceWindow . center')
-        self.l_popup = Label(self.popup, text="Do you want the game to tell you when you've done something wrong?")
+        self.popup = Toplevel(root, width=400, height=150)
+        
+
+        self.l_popup = Label(self.popup, text="Do you want the game to tell you when\n you've done something wrong?")
         self.l_popup.place(relx=0.5, rely=0.3, anchor=CENTER)
+        self.l_popup.configure(font=('Franklin Gothic Medium', 15))
+
         self.b_yes = ttk.Button(self.popup, text='Yes', command=self.pressYes)
         self.b_no = ttk.Button(self.popup, text='No', command=self.pressNo)
-        self.b_yes.place(relx=0.35, rely=0.6, anchor=CENTER)
-        self.b_no.place(relx=0.65, rely=0.6, anchor=CENTER)
+        self.b_yes.place(relx=0.35, rely=0.65, anchor=CENTER)
+        self.b_no.place(relx=0.65, rely=0.65, anchor=CENTER)
+
+        self.style.configure('TButton', font=('Franklin Gothic Medium', 10), justify='center')
 
         self.popup.mainloop()
 
