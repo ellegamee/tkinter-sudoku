@@ -300,13 +300,10 @@ class Board:
         self.t_heading.place(relx=0.5, rely=0.2, anchor=CENTER)
 
         self.b_play = ttk.Button(self.root, text="Play", takefocus=False, command=(self.pressPlay))
-        self.b_play.place(relx=0.5, rely=0.45, relwidth=0.2, relheight=0.11, anchor=CENTER)
-
-        self.b_test = ttk.Button(self.root, text='Test', takefocus=False)
-        self.b_test.place(relx=0.5, rely=0.60, relwidth=0.2, relheight=0.11, anchor=CENTER)
+        self.b_play.place(relx=0.5, rely=0.5, relwidth=0.2, relheight=0.11, anchor=CENTER)
 
         self.b_exit = ttk.Button(self.root, text='Exit', takefocus=False, command=partial(self.pressExit,root))
-        self.b_exit.place(relx=0.5, rely=0.75, relwidth=0.2, relheight=0.11, anchor=CENTER)
+        self.b_exit.place(relx=0.5, rely=0.65, relwidth=0.2, relheight=0.11, anchor=CENTER)
 
         self.style.configure('TButton', font=('Franklin Gothic Medium', 40), justify='center')
         self.t_heading.configure(font=('Impact', 100))
